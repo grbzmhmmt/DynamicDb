@@ -10,6 +10,10 @@
         div {
             padding: 8px;
         }
+
+        .deneme {
+            background-color: red
+        }
     </style>
 
     <script type="text/javascript">
@@ -164,7 +168,9 @@ WHERE TABLE_TYPE = 'BASE TABLE'"></asp:SqlDataSource>--%>
 
             <br />
             <br />
-
+            <div class="deneme">
+                Deneme
+            </div>
         </div>
     </form>
 </body>
