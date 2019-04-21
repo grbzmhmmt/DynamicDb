@@ -1,0 +1,68 @@
+﻿.app-html, .app-body, .app-page {
+    box-sizing: border-box;
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    padding: 0;
+}
+
+.app-page {
+    display: flex;
+    flex-flow: column nowrap;
+    position: absolute;
+}
+
+.app-menu {
+    display: inline-flex;
+    position: relative;
+    height: 48px;
+    padding: 8px;
+    font-size: 16px;
+    white-space: nowrap;
+    user-select: none;
+}
+
+.app-menu-item {
+    border: 1px solid transparent;
+    border-radius: 4px;
+    color: #202124;
+    font-size: 16px;
+    letter-spacing: 0.2px;
+    padding: 4px;
+    margin-left: 2px;
+    margin-right: 2px;
+    cursor: pointer;
+}
+
+.app-toolbar {
+    display: inline-flex;
+    position: relative;
+    width: 100%;
+    height: 40px;
+    padding: 8px;
+    border-top: 1px solid #dadce0;
+    border-bottom: 1px solid #dadce0;
+}
+
+.app-toolbar-item {
+    height: 24px;
+    line-height: 24px;
+    margin: 4px 2px;
+    font-weight: 500;
+    font-size: 12px;
+}
+
+.app-cell-input {
+    border: 2px solid #a0a0a0;
+    width: 100%;
+    height: 16px;
+    position: relative;
+    font-size: 16px;
+    line-height: 16px;
+}
+
+.app-table {
+    position: relative;
+    width: 100%;
+    height: 100%;
+}
