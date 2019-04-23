@@ -8,7 +8,7 @@ using System.Web.UI.WebControls;
 
 namespace DynamicDb.Pages
 {
-    public partial class WebForm1 : System.Web.UI.Page
+    public partial class CreateManager : System.Web.UI.Page
     {
         protected string dataSourceNameG = "DESKTOP-6UQLI0L";
         protected string databaseNameG;

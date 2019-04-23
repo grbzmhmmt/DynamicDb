@@ -10,7 +10,7 @@
 namespace DynamicDb.Pages {
     
     
-    public partial class WebForm1 {
+    public partial class CreateManager {
         
         /// <summary>
         /// form1 control.

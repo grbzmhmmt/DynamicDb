@@ -1,4 +1,4 @@
-﻿<%@ Page Language="C#" AutoEventWireup="true" CodeBehind="WebForm1.aspx.cs" Inherits="DynamicDb.Pages.WebForm1" %>
+﻿<%@ Page Language="C#" AutoEventWireup="true" CodeBehind="CreateManager.aspx.cs" Inherits="DynamicDb.Pages.CreateManager" %>
 
 <html>
 <head>
