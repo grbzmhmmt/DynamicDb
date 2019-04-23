@@ -83,9 +83,9 @@
     <form id="form1" runat="server">
         <div class="row">
 
-            <div class="col-md-3 alert alert-danger p-0">
+            <div class="col-md-3 bg-danger p-0">
 
-                <h3 class="alert alert-secondary">Create Database<br />
+                <h3 class="bg-secondary">Create Database<br />
 
                 </h3>
                 <br />
@@ -96,9 +96,9 @@
                 <br />
                 <asp:Button class="btn btn-success btn-sm m-1" type='button' ID='btnCreateDb' OnClick="btnCreateDb_Click" Text="Create Database" runat="server" />
             </div>
-            <div class="col-md-5 alert alert-info p-0" style="overflow-y: auto; max-height: 500px">
+            <div class="col-md-5 bg-info p-0" style="overflow-y: auto; max-height: 500px">
 
-                <h3 class="alert alert-secondary text-center">Create Table</h3>
+                <h3 class="bg-secondary text-center">Create Table</h3>
 
                 <div class="col-12">
                     <div class="row">
@@ -127,8 +127,8 @@
 
 
             </div>
-            <div class="col-md-4 alert alert-warning p-0">
-                <h3 class="alert alert-secondary text-center">Your Tables</h3>
+            <div class="col-md-4 bg-warning p-0">
+                <h3 class="bg-secondary text-center">Your Tables</h3>
                 <div class="row">
                     <div class="col-12">
                         
