@@ -10,6 +10,13 @@ namespace DynamicDb.Pages
 {
     public partial class LoginPage : System.Web.UI.Page
     {
+        private static string userId;
+        private static string userName;
+        private static string userPassword;
+        private static string userDatabaseName;
+        private static string dataSourceName= "DESKTOP - 6UQLI0L";
+
+
         protected void Page_Load(object sender, EventArgs e)
         {
 
@@ -19,30 +26,58 @@ namespace DynamicDb.Pages
 
         protected void LoginSystem(object sender, EventArgs e)
         {
-            string userName = txtLoginUserName.Text;
-            string pass = txtLoginPassword.Text;
-            
-            SqlConnection conn = new SqlConnection("Data Source= DESKTOP-6UQLI0L;Database=SqlDynamicDbMyUsers;Trusted_Connection=True;");
-            string query = "select * from Users where UserName='" + userName + "' and Password='" + pass + "'";
-            SqlCommand cmd = new SqlCommand(query, conn);
-            //conn.Close();
-            conn.Open();
-
-            SqlDataReader dr = cmd.ExecuteReader();
-            
-            List<string> myTables = new List<string>();
-
-            if (dr.Read())
+            try
             {
-                Response.Redirect("Dashboard.aspx?"+"user="+ txtLoginUserName.Text + "-" + txtLoginPassword.Text);
+                userName = txtLoginUserName.Text.Replace("\'", "").ToString(); ;
+                userPassword = txtLoginPassword.Text.Replace("\'", "").ToString(); 
+
+                //Temel Database e bağlantı kuruluyor
+                SqlConnection conn = new SqlConnection("Data Source="+dataSourceName+" ;Database=SqlDynamicDbMyUsers;Trusted_Connection=True;");
+
+                //ilgili Kullanıcı varmı diye sorgu atılıyor
+                string query = "select * from Users where UserName='" + userName + "' and Password='" + userPassword + "'";
+                SqlCommand cmd = new SqlCommand(query, conn);
+                conn.Open();
+
+                SqlDataReader dr = cmd.ExecuteReader();
+
+                if (dr.Read())//kullanıcı kontrolü
+                {
+
+                    userId = dr["UserId"].ToString();
+                    //Kullanıcı nın Database adı için sorgu
+                    string query1 = "select DatabaseName from UsersDatabase where UserId= '" + userId + "' and UserName='" + userName + "' and UserPass='" + userPassword + "'";
+                    SqlCommand cmd1 = new SqlCommand(query1, conn);
+
+                    dr.Close();
+                    SqlDataReader dr1 = cmd1.ExecuteReader();
+                    string directAddress="";
+
+                    //Kullanıcı nın Database adı olmasına göre dashboarda parametre gönderiliyor
+                    if (dr1.Read())
+                    {
+                        userDatabaseName = dr1["DatabaseName"].ToString();
+                        directAddress = "Dashboard.aspx?" + "userId=" + userId + "&userName=" + userName + "&password=" + userPassword + "&databaseName= " + userDatabaseName;
+                    }
+                    else
+                    {
+                        directAddress = "Dashboard.aspx?" + "userId=" + userId + "&userName=" + userName + "&password=" + userPassword;
+                    }
+                    Response.Redirect(directAddress);
+                }
+                else
+                {
+                    // Hatalar burada gösterilecek
+                }
+                conn.Close();
+            }
+            catch (Exception ex)
+            {
+
 
             }
-            else
-            {
-                // Hatalar burada gösterilecek
-            }
 
-            conn.Close();
+
 
 
         }
