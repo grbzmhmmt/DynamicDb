@@ -2,34 +2,34 @@
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 
-// General Information about an assembly is controlled through the following 
-// set of attributes. Change these attribute values to modify the information
-// associated with an assembly.
+// Bir derlemeyle ilgili Genel Bilgiler aşağıdaki öznitelik kümesi kullanılarak 
+// denetlenir. Bir derlemeyle ilişkilendirilmiş bilgileri değiştirmek için bu
+// öznitelik değerlerini değiştirin.
 [assembly: AssemblyTitle("DynamicDb")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
 [assembly: AssemblyProduct("DynamicDb")]
-[assembly: AssemblyCopyright("Copyright ©  2018")]
+[assembly: AssemblyCopyright("Copyright ©  2019")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
-// Setting ComVisible to false makes the types in this assembly not visible 
-// to COM components.  If you need to access a type in this assembly from 
-// COM, set the ComVisible attribute to true on that type.
+// ComVisible özniteliğini false olarak ayarlarsanız COM bileşenleri bu 
+// derlemedeki türleri göremez. Bu derlemedeki bir türe COM'dan erişmeniz 
+// gerekiyorsa, o türde ComVisible özniteliğini true olarak ayarlayın.
 [assembly: ComVisible(false)]
 
-// The following GUID is for the ID of the typelib if this project is exposed to COM
-[assembly: Guid("189ce433-b961-45cb-b1ec-d87719b7a9ac")]
+// Bu proje COM'a açılmışsa aşağıdaki GUID typelib'in ID'si içindir
+[assembly: Guid("b90b55c3-b2ac-491d-8193-68190eab0462")]
 
-// Version information for an assembly consists of the following four values:
+// Bir derlemenin sürüm bilgisi aşağıdaki dört değerden oluşur:
 //
-//      Major Version
-//      Minor Version 
-//      Build Number
-//      Revision
+//      Ana Sürüm
+//      Alt Sürüm 
+//      Yapı Numarası
+//      Düzeltme
 //
-// You can specify all the values or you can default the Revision and Build Numbers 
-// by using the '*' as shown below:
+// Tüm değerleri belirtebilirsiniz veya Düzeltme ve Yapı Numaralarına aşağıda 
+// gösterildiği gibi '*' ile varsayılan değer atayabilirsiniz:
 [assembly: AssemblyVersion("1.0.0.0")]
 [assembly: AssemblyFileVersion("1.0.0.0")]
