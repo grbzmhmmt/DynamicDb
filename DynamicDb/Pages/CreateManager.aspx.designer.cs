@@ -10,7 +10,16 @@
 namespace DynamicDb.Pages {
     
     
-    public partial class HomePage {
+    public partial class CreateManager {
+        
+        /// <summary>
+        /// NavBar denetimi.
+        /// </summary>
+        /// <remarks>
+        /// Otomatik üretilmiş alan.
+        /// Değiştirmek için, alan bildirimini tasarımcı dosyasından arka plan kod dosyasına taşıyın.
+        /// </remarks>
+        protected global::DynamicDb.Controls.NavBar NavBar;
         
         /// <summary>
         /// form1 denetimi.

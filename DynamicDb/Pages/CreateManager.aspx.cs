@@ -1,11 +1,14 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.Linq;
+using System.Web;
 using System.Web.UI;
+using System.Web.UI.WebControls;
 
 namespace DynamicDb.Pages
 {
-    public partial class HomePage : System.Web.UI.Page
+    public partial class CreateManager : System.Web.UI.Page
     {
         protected string dataSourceNameG = "DESKTOP-6UQLI0L";
         protected string databaseNameG;
@@ -198,7 +201,7 @@ namespace DynamicDb.Pages
 
         protected void getTables_Click(object sender, EventArgs e)
         {
-            string dbName = txtGetTblDatabaseName.Text.Replace("\'", "").ToString();
+            string dbName= txtGetTblDatabaseName.Text.Replace("\'", "").ToString();
             if (!string.IsNullOrEmpty(dbName))
             {
                 GetTables(dbName);
@@ -242,3 +245,5 @@ namespace DynamicDb.Pages
         }
     }
 }
+
+

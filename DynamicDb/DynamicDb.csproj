@@ -67,25 +67,56 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Pages\CustomForm\CustomForm.aspx" />
-    <Content Include="Pages\CustomForm\CustomForm.css" />
-    <Content Include="Pages\HomePage.aspx" />
+    <Content Include="Controls\NavBar.ascx" />
+    <Content Include="Pages\CreateManager.aspx" />
+    <Content Include="Pages\Dashboard.aspx" />
+    <Content Include="Pages\DataManager.aspx" />
+    <Content Include="Pages\LoginPage.aspx" />
+    <Content Include="Pages\NotFound.aspx" />
     <Content Include="Web.config" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Pages\CustomForm\CustomForm.aspx.cs">
-      <DependentUpon>CustomForm.aspx</DependentUpon>
+    <Compile Include="Controls\NavBar.ascx.cs">
+      <DependentUpon>NavBar.ascx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
-    <Compile Include="Pages\CustomForm\CustomForm.aspx.designer.cs">
-      <DependentUpon>CustomForm.aspx</DependentUpon>
+    <Compile Include="Controls\NavBar.ascx.designer.cs">
+      <DependentUpon>NavBar.ascx</DependentUpon>
     </Compile>
-    <Compile Include="Pages\HomePage.aspx.cs">
-      <DependentUpon>HomePage.aspx</DependentUpon>
+    <Compile Include="Pages\CreateManager.aspx.cs">
+      <DependentUpon>CreateManager.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
-    <Compile Include="Pages\HomePage.aspx.designer.cs">
-      <DependentUpon>HomePage.aspx</DependentUpon>
+    <Compile Include="Pages\CreateManager.aspx.designer.cs">
+      <DependentUpon>CreateManager.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\Dashboard.aspx.cs">
+      <DependentUpon>Dashboard.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Pages\Dashboard.aspx.designer.cs">
+      <DependentUpon>Dashboard.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\DataManager.aspx.cs">
+      <DependentUpon>DataManager.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Pages\DataManager.aspx.designer.cs">
+      <DependentUpon>DataManager.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\LoginPage.aspx.cs">
+      <DependentUpon>LoginPage.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Pages\LoginPage.aspx.designer.cs">
+      <DependentUpon>LoginPage.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\NotFound.aspx.cs">
+      <DependentUpon>NotFound.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Pages\NotFound.aspx.designer.cs">
+      <DependentUpon>NotFound.aspx</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -98,9 +129,7 @@
       <DependentUpon>Web.config</DependentUpon>
     </None>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Scripts\" />
-  </ItemGroup>
+  <ItemGroup />
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
