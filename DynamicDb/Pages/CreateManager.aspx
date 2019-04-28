@@ -1,9 +1,6 @@
 ﻿<%@ Page Language="C#" AutoEventWireup="true" CodeBehind="CreateManager.aspx.cs" Inherits="DynamicDb.Pages.CreateManager" %>
-<<<<<<< HEAD:DynamicDb/Pages/CreateManager.aspx
 
 <%@ Register Src="~/Controls/NavBar.ascx" TagPrefix="uc" TagName="NavBar" %>
-=======
->>>>>>> master:DynamicDb/Pages/CreateManager.aspx
 
 <html>
 <head>
@@ -82,17 +79,8 @@
     </div>
     <form id="form1" runat="server">
         <div class="row">
-<<<<<<< HEAD:DynamicDb/Pages/CreateManager.aspx
             <div class="col-md-3 bg-danger p-0">
                 <h3 class="bg-secondary">Create Database<br /></h3>
-=======
-
-            <div class="col-md-3 bg-danger p-0">
-
-                <h3 class="bg-secondary">Create Database<br />
-
-                </h3>
->>>>>>> master:DynamicDb/Pages/CreateManager.aspx
                 <br />
                 <asp:TextBox CssClass="col-sm-9" ID="txtDbDataSourceName" placeholder="DataSource Name" runat="server"></asp:TextBox>
                 <br />
@@ -102,13 +90,7 @@
                 <asp:Button class="btn btn-success btn-sm m-1" type='button' ID='btnCreateDb' OnClick="btnCreateDb_Click" Text="Create Database" runat="server" />
             </div>
             <div class="col-md-5 bg-info p-0" style="overflow-y: auto; max-height: 500px">
-<<<<<<< HEAD:DynamicDb/Pages/CreateManager.aspx
                 <h3 class="bg-secondary text-center">Create Table</h3>
-=======
-
-                <h3 class="bg-secondary text-center">Create Table</h3>
-
->>>>>>> master:DynamicDb/Pages/CreateManager.aspx
                 <div class="col-12">
                     <div class="row">
                         <asp:TextBox CssClass="col-sm-4" ID="txtTblDatabaseName" placeholder="Database Name" runat="server"></asp:TextBox>
@@ -138,7 +120,7 @@
                         <asp:Button class="btn btn-success btn-sm col-sm-3 m-1 " type='button' ID='getTables' OnClick="getTables_Click" Text="Get Tables" runat="server" />
                         <hr />
 
-                        <%--                        <asp:GridView ID="GridViewTables" runat="server" AutoGenerateColumns="False" DataSourceID="SqlDataSourceTables" AllowSorting="True">
+                        <%--  <asp:GridView ID="GridViewTables" runat="server" AutoGenerateColumns="False" DataSourceID="SqlDataSourceTables" AllowSorting="True">
                             <Columns>
                                 <asp:BoundField DataField="Tablolar" HeaderText="Tablolar" SortExpression="Tablolar" />
                                 <asp:TemplateField ShowHeader="False">
@@ -148,8 +130,6 @@
                                 </asp:TemplateField>
                             </Columns>
                         </asp:GridView>
-
-
 
                         <asp:SqlDataSource ID="SqlDataSourceTables" runat="server" ConnectionString="<%$ ConnectionStrings:masterConnectionString %>" SelectCommand="SELECT TABLE_NAME AS Tablolar
 FROM deneme.INFORMATION_SCHEMA.TABLES 

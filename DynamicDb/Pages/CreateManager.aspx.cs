@@ -43,7 +43,7 @@ namespace DynamicDb.Pages
                 {
                     CreateTableWithForeignKey(databaseNameG, tableNameG, myArray, primaryKeyG, foreignKeyG, foreingKeyRefTableG, foreignKeyRefColumnG);
                 }
-                catch (Exception ex)
+                catch (Exception)
                 {
 
                     Response.Write("<script>alert('Foreign Hatası');</script>");
@@ -56,7 +56,7 @@ namespace DynamicDb.Pages
                     isQuerySuccess = CreateTableWithPrimaryKey(databaseNameG, tableNameG, myArray, primaryKeyG);
 
                 }
-                catch (Exception ex)
+                catch (Exception)
                 {
                     Response.Write("<script>alert('PrimaryKey Hatası');</script>");
                 }
@@ -107,7 +107,7 @@ namespace DynamicDb.Pages
                 conn.Close();
                 return true;
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 return false;
             }
@@ -149,7 +149,7 @@ namespace DynamicDb.Pages
 
                 return true;
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 return false;
             }
@@ -190,7 +190,7 @@ namespace DynamicDb.Pages
                     cmd.ExecuteNonQuery();
                     conn.Close();
                 }
-                catch (Exception ex)
+                catch (Exception)
                 {
                     Response.Write("<script>alert('Lütfen Database İsmi Giriniz');</script>");
                 }

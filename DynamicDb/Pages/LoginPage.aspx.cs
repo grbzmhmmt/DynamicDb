@@ -23,7 +23,6 @@ namespace DynamicDb.Pages
 
         }
 
-
         protected void LoginSystem(object sender, EventArgs e)
         {
             try
@@ -71,17 +70,11 @@ namespace DynamicDb.Pages
                 }
                 conn.Close();
             }
-            catch (Exception ex)
+            catch (Exception)
             {
 
 
             }
-
-
-
-
         }
-
-
     }
 }
