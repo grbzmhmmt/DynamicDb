@@ -67,6 +67,10 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="App_Data\DynamicDatabase.mdf" />
+    <Content Include="App_Data\DynamicDatabase_log.ldf">
+      <DependentUpon>DynamicDatabase.mdf</DependentUpon>
+    </Content>
     <Content Include="Controls\NavBar.ascx" />
     <Content Include="Pages\CreateManager.aspx" />
     <Content Include="Pages\Dashboard.aspx" />

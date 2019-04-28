@@ -22,3 +22,8 @@ $RECYCLE.BIN/
 # Operating System Files
 # =========================
 /.vs
+.vs/config/applicationhost.config
+.vs/DynamicDb/v15/.suo
+.vs/DynamicDb/v15/Server/sqlite3/storage.ide
+.vs/DynamicDb/v15/Server/sqlite3/storage.ide-shm
+.vs/DynamicDb/v15/Server/sqlite3/storage.ide-wal

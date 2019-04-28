@@ -1,25 +1,26 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Data.SqlClient;
-using System.Linq;
-using System.Web;
 using System.Web.UI;
-using System.Web.UI.WebControls;
 
 namespace DynamicDb.Pages
 {
-    public partial class LoginPage : System.Web.UI.Page
+    public partial class LoginPage : Page
     {
-        private static string userId;
-        private static string userName;
-        private static string userPassword;
-        private static string userDatabaseName;
-        private static string dataSourceName= "DESKTOP - 6UQLI0L";
+        private string userId;
+        private string userName;
+        private string userPassword;
+        private string userDatabaseName;
+        private string dataSourceName= "DESKTOP - 6UQLI0L";
+        private string databaseName = "SqlDynamicDbMyUsers";
+
+        private string sqlConnection = "Data Source=(LocalDB)/MSSQLLocalDB;" +
+            "AttachDbFilename=App_Data/DynamicDatabase.mdf;" +
+            "Integrated Security=True;" +
+            "Trusted_Connection=True;";
 
 
         protected void Page_Load(object sender, EventArgs e)
         {
-
 
         }
 
@@ -28,10 +29,14 @@ namespace DynamicDb.Pages
             try
             {
                 userName = txtLoginUserName.Text.Replace("\'", "").ToString(); ;
-                userPassword = txtLoginPassword.Text.Replace("\'", "").ToString(); 
-
+                userPassword = txtLoginPassword.Text.Replace("\'", "").ToString();
                 //Temel Database e bağlantı kuruluyor
-                SqlConnection conn = new SqlConnection("Data Source="+dataSourceName+" ;Database=SqlDynamicDbMyUsers;Trusted_Connection=True;");
+                //SqlConnection conn = new SqlConnection(
+                //    "Data Source="+dataSourceName+"" +
+                //    " ;Database="+ databaseName +
+                //    " ;Trusted_Connection=True;"
+                //);
+                SqlConnection conn = new SqlConnection(sqlConnection);
 
                 //ilgili Kullanıcı varmı diye sorgu atılıyor
                 string query = "select * from Users where UserName='" + userName + "' and Password='" + userPassword + "'";
@@ -42,7 +47,6 @@ namespace DynamicDb.Pages
 
                 if (dr.Read())//kullanıcı kontrolü
                 {
-
                     userId = dr["UserId"].ToString();
                     //Kullanıcı nın Database adı için sorgu
                     string query1 = "select DatabaseName from UsersDatabase where UserId= '" + userId + "' and UserName='" + userName + "' and UserPass='" + userPassword + "'";
@@ -70,10 +74,9 @@ namespace DynamicDb.Pages
                 }
                 conn.Close();
             }
-            catch (Exception)
+            catch (Exception exception)
             {
-
-
+                Console.WriteLine(exception);
             }
         }
     }
