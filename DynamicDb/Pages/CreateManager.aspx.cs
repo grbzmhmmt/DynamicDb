@@ -125,6 +125,7 @@ namespace DynamicDb.Pages
                 ConnectAndExecuteQuery(connectionString, query);
 
                 _dataSourceName = dataSourceName;
+                Session["_dataSourceName"] = _dataSourceName;
             }
             catch (Exception)
             {

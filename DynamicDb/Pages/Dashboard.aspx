@@ -22,7 +22,7 @@
                     <div class="row">
                         <asp:HyperLink CssClass="btn btn-sm col-8 btn-primary offset-2 mt-1 mb-1"  NavigateUrl="~/Pages/CreateManager.aspx" ID="btnCreateDbLink" runat="server" Text="Create Database" />
                         <asp:HyperLink CssClass="btn btn-sm col-8 btn-success offset-2 mt-1 mb-1" NavigateUrl="~/Pages/CreateManager.aspx" ID="btnCreateTableLink" runat="server" Text="Create Table"/>
-                        <asp:HyperLink CssClass="btn btn-sm col-8 btn-warning offset-2 mt-1 mb-1" NavigateUrl="~/Pages/CreateManager.aspx" ID="btnEditTableLink" runat="server" Text="Edit Table" />
+                        <asp:HyperLink CssClass="btn btn-sm col-8 btn-warning offset-2 mt-1 mb-1" NavigateUrl="~/Pages/DataManager.aspx" ID="btnEditTableLink" runat="server" Text="Edit Table" />
                         <asp:HyperLink CssClass="btn btn-sm col-8 btn-secondary offset-2 mt-1 mb-1" NavigateUrl="~/Pages/CreateManager.aspx" ID="btnMyTablesLink" runat="server" Text="My Tables" />
                     </div>
                 </div>
