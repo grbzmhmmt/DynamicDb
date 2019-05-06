@@ -87,7 +87,7 @@
                 <asp:TextBox CssClass="col-sm-9" ID="txtDbDatabaseName" placeholder="Database Name" runat="server"></asp:TextBox>
                 <br />
                 <br />
-                <asp:Button class="btn btn-success btn-sm m-1" type='button' ID='btnCreateDb' OnClick="btnCreateDb_Click" Text="Create Database" runat="server" />
+                <asp:Button class="btn btn-success btn-sm m-1" type='button' ID='BtnCreateDb' OnClick="BtnCreateDb_Click" Text="Create Database" runat="server" />
             </div>
             <div class="col-md-5 bg-info p-0" style="overflow-y: auto; max-height: 500px">
                 <h3 class="bg-secondary text-center">Create Table</h3>
@@ -102,7 +102,7 @@
 
                         <button class="btn btn-success btn-sm m-1" type='button' id='addTblColumn'><span class="glyphicon glyphicon-plus" aria-hidden="true"></span>Add</button>
                         <button class="btn btn-danger btn-sm m-1" type='button' id='rmvTblColumn'><span class="glyphicon glyphicon-trash" aria-hidden="true"></span>Remove</button>
-                        <asp:Button CssClass="btn btn-info btn-sm m-1" ID="setValuesTbl" runat="server" OnClick="BtnCreateTable" Text="Create" Width="88px" />
+                        <asp:Button CssClass="btn btn-info btn-sm m-1" ID="setValuesTbl" runat="server" OnClick="BtnCreateTable_Click" Text="Create" Width="88px" />
                     </div>
                 </div>
                 <div class="col-12" id='TextBoxesGroup'>
@@ -117,7 +117,7 @@
                 <div class="row">
                     <div class="col-12">
                         <asp:TextBox CssClass="col-sm-8" ID="txtGetTblDatabaseName" placeholder="Database Name" runat="server"></asp:TextBox>
-                        <asp:Button class="btn btn-success btn-sm col-sm-3 m-1 " type='button' ID='getTables' OnClick="getTables_Click" Text="Get Tables" runat="server" />
+                        <asp:Button class="btn btn-success btn-sm col-sm-3 m-1 " type='button' ID='BtnGetTables' OnClick="GetTables_Click" Text="Get Tables" runat="server" />
                         <hr />
 
                         <%--  <asp:GridView ID="GridViewTables" runat="server" AutoGenerateColumns="False" DataSourceID="SqlDataSourceTables" AllowSorting="True">

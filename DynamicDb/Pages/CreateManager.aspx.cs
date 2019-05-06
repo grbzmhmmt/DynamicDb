@@ -6,68 +6,138 @@ namespace DynamicDb.Pages
 {
     public partial class CreateManager : System.Web.UI.Page
     {
-        protected string dataSourceNameG = "DESKTOP-6UQLI0L";
-        protected string databaseNameG;
-        protected string tableNameG;
-        protected string primaryKeyG;
-        protected string foreignKeyG;
-        protected string foreingKeyRefTableG;
-        protected string foreignKeyRefColumnG;
-
+        private string _dataSourceName;
+        //private string databaseNameG;
+        //protected string tableNameG;
+        //protected string primaryKeyG;
+        //protected string foreignKeyG;
+        //protected string foreingKeyRefTableG;
+        //protected string foreignKeyRefColumnG;
 
         protected void Page_Load(object sender, EventArgs e)
         {
-            txtDbDataSourceName.Text = dataSourceNameG;
+            // txtDbDataSourceName.Text = dataSourceNameG;
         }
 
-        protected void BtnCreateTable(object sender, EventArgs e)
+        protected void BtnCreateDb_Click(object sender, EventArgs e)
         {
-            databaseNameG = txtTblDatabaseName.Text.Replace("\'", "").ToString();
-            tableNameG = txtTblTableName.Text.Replace("\'", "").ToString();
-            primaryKeyG = txtTblPrimaryKeyName.Text.Replace("\'", "").ToString();
-            foreignKeyG = txtTblForeignKeyName.Text.Replace("\'", "").ToString();
-            foreingKeyRefTableG = txtTblForeignKeyReferanceTable.Text.Replace("\'", "").ToString();
-            foreignKeyRefColumnG = txtTblForeingKeyReferanceColumn.Text.Replace("\'", "").ToString();
-
-            string[] myArray = hdnTblColumns.Value.Split(',');
-            myArray = myArray.Reverse().Skip(1).Reverse().ToArray();
-            bool isQuerySuccess = true;
-
-            if (!string.IsNullOrEmpty(foreignKeyG) && !string.IsNullOrEmpty(foreingKeyRefTableG) && !string.IsNullOrEmpty(foreignKeyRefColumnG))
+            string dataSourceName = txtDbDataSourceName.Text.Replace("\'", "").ToString().Trim();
+            string databaseName = txtDbDatabaseName.Text.Replace("\'", "").ToString().Trim();
+            if (!string.IsNullOrEmpty(databaseName) && !string.IsNullOrEmpty(dataSourceName))
             {
-                try
-                {
-                    CreateTableWithForeignKey(databaseNameG, tableNameG, myArray, primaryKeyG, foreignKeyG, foreingKeyRefTableG, foreignKeyRefColumnG);
-                }
-                catch (Exception)
-                {
+                CreateDatabase(databaseName, dataSourceName);
+            } else {
+                Response.Write("<script>alert('Database Source ve Name alanını boş bırakmayınız.');</script>");               
+            }
+        }
 
-                    Response.Write("<script>alert('Foreign Hatası');</script>");
+        protected void BtnCreateTable_Click(object sender, EventArgs e)
+        {
+            if (string.IsNullOrEmpty(_dataSourceName))
+            {
+                _dataSourceName = txtDbDataSourceName.Text.Replace("\'", "").ToString().Trim();
+
+                if (string.IsNullOrEmpty(_dataSourceName))
+                {
+                    Response.Write("<script>alert('Database Source alanını boş bırakmayınız.');</script>");
+                    return;
+                }
+            }
+
+            string databaseName = txtDbDatabaseName.Text.Replace("\'", "").ToString().Trim();
+            string tableName = txtTblTableName.Text.Replace("\'", "").ToString().Trim();
+            string primaryKey = txtTblPrimaryKeyName.Text.Replace("\'", "").ToString().Trim();
+            string foreignKey = txtTblForeignKeyName.Text.Replace("\'", "").ToString().Trim();
+            string foreingKeyRefTable = txtTblForeignKeyReferanceTable.Text.Replace("\'", "").ToString().Trim();
+            string foreignKeyRefColumn = txtTblForeingKeyReferanceColumn.Text.Replace("\'", "").ToString().Trim();
+
+            string[] myArray = hdnTblColumns.Value.Trim().Split(',');
+            myArray = myArray.Reverse().Skip(1).Reverse().ToArray();
+
+            if (!string.IsNullOrEmpty(databaseName) || !string.IsNullOrEmpty(tableName))
+            {
+                if (!string.IsNullOrEmpty(foreignKey) && !string.IsNullOrEmpty(foreingKeyRefTable) && !string.IsNullOrEmpty(foreignKeyRefColumn))
+                {
+                    try
+                    {
+                        CreateTableWithForeignKey(databaseName, tableName, myArray, primaryKey, foreignKey, foreingKeyRefTable, foreignKeyRefColumn);
+                    }
+                    catch (Exception)
+                    {
+                        Response.Write("<script>alert('Foreign Key Hatası');</script>");
+                    }
+                }
+                else
+                {
+                    try
+                    {
+                        CreateTableWithPrimaryKey(databaseName, tableName, myArray, primaryKey);
+                    }
+                    catch (Exception)
+                    {
+                        Response.Write("<script>alert('Primary Key Hatası');</script>");
+                    }
                 }
             }
             else
             {
-                try
-                {
-                    isQuerySuccess = CreateTableWithPrimaryKey(databaseNameG, tableNameG, myArray, primaryKeyG);
-
-                }
-                catch (Exception)
-                {
-                    Response.Write("<script>alert('PrimaryKey Hatası');</script>");
-                }
+                Response.Write("<script>alert('Database Name veya Table Name alanını boş bırakmayınız.');</script>");
             }
-
-
         }
 
-        protected Boolean CreateTableWithPrimaryKey(string dbName, string tableName, string[] columns, string primaryKey)
+        protected void GetTables_Click(object sender, EventArgs e)
+        {
+            string dbName = txtGetTblDatabaseName.Text.Replace("\'", "").ToString();
+            if (!string.IsNullOrEmpty(dbName))
+            {
+                GetTables(dbName);
+            }
+        }
+
+        private void ConnectAndExecuteQuery(string connectionString, string query)
+        {
+            if (string.IsNullOrEmpty(_dataSourceName))
+            {
+                _dataSourceName = txtDbDataSourceName.Text.Replace("\'", "").ToString().Trim();
+                if (string.IsNullOrEmpty(_dataSourceName))
+                {
+                    Response.Write("<script>alert('Database Source alanını boş bırakmayınız.');</script>");
+                    return;
+                }
+            }
+            SqlConnection conn = new SqlConnection(connectionString);
+
+            conn.Open();
+
+            SqlCommand cmd = new SqlCommand(query, conn);
+            cmd.ExecuteNonQuery();
+
+            conn.Close();
+        }
+
+        private void CreateDatabase(string dbName, string dataSourceName)
+        {
+            try
+            {
+                string connectionString = "Data Source=" + dataSourceName + ";Database=master;Trusted_Connection=True;";
+                string query = "CREATE DATABASE " + dbName;
+
+                ConnectAndExecuteQuery(connectionString, query);
+
+                _dataSourceName = dataSourceName;
+            }
+            catch (Exception)
+            {
+                Response.Write("<script>alert('Lütfen Data Source kısmına doğru giriş yaptığınızdan emin olunuz.');</script>");
+            }
+        }
+
+        private void CreateTableWithPrimaryKey(string dbName, string tableName, string[] columns, string primaryKey)
         {
             string query = "";
             if (!string.IsNullOrEmpty(primaryKey))
             {
-                query = "CREATE TABLE " + tableName +
-                    "(" + primaryKey + " int NOT NULL,";
+                query = "CREATE TABLE " + tableName + "(" + primaryKey + " int NOT NULL,";
 
                 foreach (var column in columns)
                 {
@@ -75,10 +145,6 @@ namespace DynamicDb.Pages
                 }
 
                 query += " CONSTRAINT [PK_" + tableName + "] PRIMARY KEY (" + primaryKey + " ASC))";
-
-                /*"WITH(PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF," +
-                " ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON[PRIMARY]) ON[PRIMARY] GO";
-                */
             }
             else
             {
@@ -93,30 +159,24 @@ namespace DynamicDb.Pages
             }
             try
             {
-
-                SqlConnection conn = new SqlConnection("Data Source=" + dataSourceNameG + ";Database=" + dbName + ";Trusted_Connection=True;");
-
-                SqlCommand cmd = new SqlCommand(query, conn);
-                conn.Close();
-                conn.Open();
-                cmd.ExecuteNonQuery();
-                conn.Close();
-                return true;
+                string connectionString = "Data Source=" + _dataSourceName + ";Database=" + dbName + ";Trusted_Connection=True;";
+                ConnectAndExecuteQuery(connectionString, query);
             }
             catch (Exception)
             {
-                return false;
+                Response.Write("<script>alert('Veri Tabanına bağlanırken bir sorunla karşılaşıldı.');</script>");
             }
         }
 
-        protected Boolean CreateTableWithForeignKey(string dbName, string tableName, string[] columns, string primaryKey, string foreignKey, string foreingKeyRefTable, string foreignKeyRefColumn)
+        private void CreateTableWithForeignKey(string dbName, string tableName, string[] columns, string primaryKey, string foreignKey, string foreingKeyRefTable, string foreignKeyRefColumn)
         {
             string query = "";
             if (!string.IsNullOrEmpty(primaryKey))
             {
                 query = "CREATE TABLE " + tableName +
                     "(" + primaryKey + " int NOT NULL," +
-                    "  [" + foreignKey + "] int NOT NULL,";
+                    "  [" + foreignKey + "] int NOT NULL," +
+                    "PRIMARY KEY CLUSTERED (" + primaryKey + " ASC)";
 
                 foreach (var column in columns)
                 {
@@ -125,88 +185,37 @@ namespace DynamicDb.Pages
 
                 query += " CONSTRAINT [PK_" + tableName + "] PRIMARY KEY (" + primaryKey + " ASC)";
 
-                query += "WITH(PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF," +
-                " ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON[PRIMARY]) ON[PRIMARY]";
+                query += "WITH(" +
+                    "PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, " +
+                    "IGNORE_DUP_KEY = OFF, " +
+                    "ALLOW_ROW_LOCKS = ON, " +
+                    "ALLOW_PAGE_LOCKS = ON" +
+                    ") ON[PRIMARY]) ON[PRIMARY]";
 
-                query += "ALTER TABLE[dbo].[" + tableName + "] WITH CHECK ADD CONSTRAINT[FK_" + tableName + "_" + foreingKeyRefTable + "]" +
-                    " FOREIGN KEY([" + foreignKey + "]) REFERENCES[dbo].[" + foreingKeyRefTable + "] ([" + foreignKeyRefColumn + "])";
-                query += " ALTER TABLE[dbo].[" + tableName + "] CHECK CONSTRAINT[FK_" + tableName + "_" + foreingKeyRefTable + "]";
+                query += "ALTER TABLE[dbo].[" + tableName + "] WITH CHECK ADD " +
+                    "CONSTRAINT[FK_" + tableName + "_" + foreingKeyRefTable + "] " +
+                    "FOREIGN KEY([" + foreignKey + "]) " +
+                    "REFERENCES[dbo].[" + foreingKeyRefTable + "] ([" + foreignKeyRefColumn + "])";
+
+                query += " ALTER TABLE[dbo].[" + tableName + "] CHECK " +
+                    "CONSTRAINT[FK_" + tableName + "_" + foreingKeyRefTable + "]";
             }
-            else { return false; }
+            else
+            {
+                Response.Write("<script>alert('Primary Key alanı boş bırakılamaz');</script>");
+            }
             try
             {
-                SqlConnection conn = new SqlConnection("Data Source=" + dataSourceNameG + ";Database=" + dbName + ";Trusted_Connection=True;");
-
-                SqlCommand cmd = new SqlCommand(query, conn);
-                conn.Close();
-                conn.Open();
-                cmd.ExecuteNonQuery();
-                conn.Close();
-
-                return true;
+                string connectionString = "Data Source=" + _dataSourceName + ";Database=" + dbName + ";Trusted_Connection=True;";
+                ConnectAndExecuteQuery(connectionString, query);
             }
             catch (Exception)
             {
-                return false;
+                Response.Write("<script>alert('Veri Tabanına bağlanırken bir sorunla karşılaşıldı.');</script>");
             }
-
-
         }
 
-        protected void btnCreateDb_Click(object sender, EventArgs e)
-        {
-            string dbName = txtDbDatabaseName.Text.Replace("\'", "").ToString();
-            string dataSourceName = txtDbDataSourceName.Text.Replace("\'", "").ToString();
-            CreateDatabase(dbName, dataSourceName);
-
-        }
-
-        protected void CreateDatabase(string dbName, string dataSourceName)
-        {
-            string query = "";
-            SqlConnection conn;
-            if (!string.IsNullOrEmpty(dbName))
-            {
-                if (!string.IsNullOrEmpty(dataSourceName))
-                {
-                    conn = new SqlConnection("Data Source=" + dataSourceName + ";Database=master;Trusted_Connection=True;");
-                }
-                else
-                {
-                    conn = new SqlConnection("Data Source=" + dataSourceNameG + ";Database=master;Trusted_Connection=True;");
-                }
-
-                try
-                {
-                    query = "CREATE DATABASE " + dbName;
-
-                    SqlCommand cmd = new SqlCommand(query, conn);
-                    conn.Close();
-                    conn.Open();
-                    cmd.ExecuteNonQuery();
-                    conn.Close();
-                }
-                catch (Exception)
-                {
-                    Response.Write("<script>alert('Lütfen Database İsmi Giriniz');</script>");
-                }
-            }
-
-
-        }
-
-        protected void getTables_Click(object sender, EventArgs e)
-        {
-            string dbName= txtGetTblDatabaseName.Text.Replace("\'", "").ToString();
-            if (!string.IsNullOrEmpty(dbName))
-            {
-                GetTables(dbName);
-            }
-
-
-        }
-
-        protected void GetTables(string dbName)
+        private void GetTables(string dbName)
         {
             /*
             try
@@ -233,13 +242,9 @@ namespace DynamicDb.Pages
             }
             catch (Exception ex)
             {
-
                 throw;
             }
             */
-
         }
     }
 }
-
-
