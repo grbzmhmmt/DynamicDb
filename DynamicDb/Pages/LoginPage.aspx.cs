@@ -1,6 +1,10 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Data.SqlClient;
+using System.IO;
+using System.Linq;
 using System.Web.UI;
+using Microsoft.SqlServer.TransactSql.ScriptDom;
 
 namespace DynamicDb.Pages
 {
@@ -31,6 +35,25 @@ namespace DynamicDb.Pages
             "Application Name=DynamicDb";
         }
 
+        public bool IsSQLQueryValid(string sql, out List<string> errors)
+        {
+            errors = new List<string>();
+            TSql140Parser parser = new TSql140Parser(false);
+            TSqlFragment fragment;
+            IList<ParseError> parseErrors;
+
+            using (TextReader reader = new StringReader(sql))
+            {
+                fragment = parser.Parse(reader, out parseErrors);
+                if (parseErrors != null && parseErrors.Count > 0)
+                {
+                    errors = parseErrors.Select(e => e.Message).ToList();
+                    return false;
+                }
+            }
+            return true;
+        }
+
         protected void LoginSystem(object sender, EventArgs e)
         {
             try
@@ -58,29 +81,51 @@ namespace DynamicDb.Pages
                     //Kullanıcı nın Database adı için sorgu
                     //string query1 = "select DatabaseName from UsersDatabase where UserId= '" + userId + "' and UserName='" + userName + "' and Password='" + userPassword + "'";
                     //SqlCommand cmd1 = new SqlCommand(query1, conn);
-                    query = "SELECT user FROM " + "Users" + " WHERE UserId = '" + userId + "' AND UserName = '" + userName + "' AND Password = '" + userPassword + "'";
+                    //query = "SELECT user FROM " + "Users" + " WHERE UserId = '" + userId + "' AND UserName = '" + userName + "' AND Password = '" + userPassword + "'";
+                    query = "select DatabaseName from UsersDatabase where UserId= '" + userId + "' and UserName='" + userName + "' and Password='" + userPassword + "'";
 
-                    cmd = new SqlCommand(query, conn);
+                    List<string> errors;
+                    //Sql sorgusu doğrumu
+                    if (IsSQLQueryValid(query, out errors))
+                    {
+                        cmd = new SqlCommand(query, conn);
+                    }
 
                     dr.Close();
                     //SqlDataReader dr1 = cmd1.ExecuteReader();
-                    dr = cmd.ExecuteReader();
 
-                    string directAddress="";
-
-                    //Kullanıcı nın Database adı olmasına göre dashboarda parametre gönderiliyor
-                    if (dr.Read()) //(dr1.Read())
+                    string directAddress = "";
+                    //from UsersDatabase tablosu var mı yok mu? 0 dan büyükse var
+                    try
                     {
-                        //userDatabaseName = dr1["DatabaseName"].ToString();
-                        string user = dr["user"].ToString();
-                        //directAddress = "Dashboard.aspx?" + "userId=" + userId + "&userName=" + userName + "&password=" + userPassword + "&databaseName= " + userDatabaseName;
-                        directAddress = "Dashboard.aspx?" + "userId=" + userId + "&userName=" + userName + "&password=" + userPassword + "&databaseName= " + user;
-                    }
-                    else
+                        //Tablo yoksa hata verecek ve biz direkt catch içinde else işlemini yürüteceğiz
+                        dr = cmd.ExecuteReader();
+
+                        //Kullanıcı nın Database adı olmasına göre dashboarda parametre gönderiliyor
+                        if (dr.Read()) //(dr1.Read())
+                        {
+                            userDatabaseName = dr["DatabaseName"].ToString();
+                            if (userDatabaseName != null && userDatabaseName.Trim() != "")
+                            {
+                                //string user = dr["user"].ToString();
+                                directAddress = "Dashboard.aspx?" + "userId=" + userId + "&userName=" + userName + "&password=" + userPassword + "&databaseName= " + userDatabaseName;
+                                //directAddress = "Dashboard.aspx?" + "userId=" + userId + "&userName=" + userName + "&password=" + userPassword + "&databaseName= " + user;
+                            }
+                            else
+                            {
+                                directAddress = "Dashboard.aspx?" + "userId=" + userId + "&userName=" + userName + "&password=" + userPassword;
+                            }
+                        }
+                        else
+                        {
+                            directAddress = "Dashboard.aspx?" + "userId=" + userId + "&userName=" + userName + "&password=" + userPassword;
+                        }
+                        Response.Redirect(directAddress);
+                    } catch (Exception)
                     {
                         directAddress = "Dashboard.aspx?" + "userId=" + userId + "&userName=" + userName + "&password=" + userPassword;
+                        Response.Redirect(directAddress);
                     }
-                    Response.Redirect(directAddress);
                 }
                 else
                 {
