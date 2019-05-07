@@ -48,12 +48,6 @@ C:\Github\DynamicDb\DynamicDb\bin\roslyn\vbc.rsp
 C:\Github\DynamicDb\DynamicDb\bin\roslyn\VBCSCompiler.exe
 C:\Github\DynamicDb\DynamicDb\bin\roslyn\VBCSCompiler.exe.config
 C:\Github\DynamicDb\DynamicDb\bin\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.dll
-C:\Github\DynamicDb\DynamicDb\bin\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.xml
-C:\Github\DynamicDb\DynamicDb\obj\Debug\DynamicDb.csprojAssemblyReference.cache
-C:\Github\DynamicDb\DynamicDb\obj\Debug\DynamicDb.csproj.CoreCompileInputs.cache
-C:\Github\DynamicDb\DynamicDb\obj\Debug\DynamicDb.csproj.CopyComplete
-C:\Github\DynamicDb\DynamicDb\obj\Debug\DynamicDb.dll
-C:\Github\DynamicDb\DynamicDb\obj\Debug\DynamicDb.pdb
 C:\Github\DynamicDb\DynamicDb\bin\Microsoft.Data.Tools.Schema.Sql.dll
 C:\Github\DynamicDb\DynamicDb\bin\Microsoft.Data.Tools.Utilities.dll
 C:\Github\DynamicDb\DynamicDb\bin\Microsoft.SqlServer.Dac.dll
@@ -69,6 +63,7 @@ C:\Github\DynamicDb\DynamicDb\bin\Microsoft.SqlServer.Dac.Extensions.xml
 C:\Github\DynamicDb\DynamicDb\bin\Microsoft.SqlServer.TransactSql.ScriptDom.pdb
 C:\Github\DynamicDb\DynamicDb\bin\Microsoft.SqlServer.TransactSql.ScriptDom.xml
 C:\Github\DynamicDb\DynamicDb\bin\Microsoft.SqlServer.Types.pdb
+C:\Github\DynamicDb\DynamicDb\bin\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.xml
 C:\Github\DynamicDb\DynamicDb\bin\de-DE\Microsoft.Data.Tools.Schema.Sql.resources.dll
 C:\Github\DynamicDb\DynamicDb\bin\es-ES\Microsoft.Data.Tools.Schema.Sql.resources.dll
 C:\Github\DynamicDb\DynamicDb\bin\fr-FR\Microsoft.Data.Tools.Schema.Sql.resources.dll
@@ -119,3 +114,7 @@ C:\Github\DynamicDb\DynamicDb\bin\pt-BR\Microsoft.SqlServer.TransactSql.ScriptDo
 C:\Github\DynamicDb\DynamicDb\bin\ru-RU\Microsoft.SqlServer.TransactSql.ScriptDom.resources.dll
 C:\Github\DynamicDb\DynamicDb\bin\zh-CN\Microsoft.SqlServer.TransactSql.ScriptDom.resources.dll
 C:\Github\DynamicDb\DynamicDb\bin\zh-TW\Microsoft.SqlServer.TransactSql.ScriptDom.resources.dll
+C:\Github\DynamicDb\DynamicDb\obj\Debug\DynamicDb.csproj.CoreCompileInputs.cache
+C:\Github\DynamicDb\DynamicDb\obj\Debug\DynamicDb.csproj.CopyComplete
+C:\Github\DynamicDb\DynamicDb\obj\Debug\DynamicDb.dll
+C:\Github\DynamicDb\DynamicDb\obj\Debug\DynamicDb.pdb

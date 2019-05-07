@@ -1,10 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Data.SqlClient;
-using System.IO;
-using System.Linq;
 using System.Web.UI;
-using Microsoft.SqlServer.TransactSql.ScriptDom;
 
 namespace DynamicDb.Pages
 {
@@ -67,7 +63,13 @@ namespace DynamicDb.Pages
                     dr.Close();
                     conn.Close();
 
-                    Response.Redirect(directAddress);                   
+                    try
+                    {
+                        Response.Redirect(directAddress);
+                    } catch
+                    {
+                        Response.Redirect("Pages/" + directAddress);
+                    }            
                 }
                 else
                 {

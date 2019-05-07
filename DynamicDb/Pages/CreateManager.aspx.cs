@@ -1,22 +1,17 @@
 ﻿using System;
 using System.Data.SqlClient;
 using System.Linq;
+using System.Web;
+using System.Web.UI;
 
 namespace DynamicDb.Pages
 {
-    public partial class CreateManager : System.Web.UI.Page
+    public partial class CreateManager : Page
     {
         private string _dataSourceName;
-        //private string databaseNameG;
-        //protected string tableNameG;
-        //protected string primaryKeyG;
-        //protected string foreignKeyG;
-        //protected string foreingKeyRefTableG;
-        //protected string foreignKeyRefColumnG;
 
         protected void Page_Load(object sender, EventArgs e)
         {
-            // txtDbDataSourceName.Text = dataSourceNameG;
         }
 
         protected void BtnCreateDb_Click(object sender, EventArgs e)
@@ -26,8 +21,10 @@ namespace DynamicDb.Pages
             if (!string.IsNullOrEmpty(databaseName) && !string.IsNullOrEmpty(dataSourceName))
             {
                 CreateDatabase(databaseName, dataSourceName);
-            } else {
-                Response.Write("<script>alert('Database Source ve Name alanını boş bırakmayınız.');</script>");               
+            }
+            else
+            {
+                Response.Write("<script>alert('Database Source ve Name alanını boş bırakmayınız.');</script>");
             }
         }
 
@@ -105,6 +102,29 @@ namespace DynamicDb.Pages
                     return;
                 }
             }
+            if (_dataSourceName.Contains("(LocalDB)\\MSSQLLocalDB"))
+            {
+                string dataFileSourceName = "C:\\Github\\DynamicDb\\DynamicDb\\App_Data\\DynamicDatabase.mdf";
+                connectionString = "Data Source=(LocalDB)\\MSSQLLocalDB;" +
+                    "AttachDbFilename=" + dataFileSourceName + ";" +
+                    "Initial Catalog=Alpha;" +
+                    "Integrated Security=True;" +
+                    "Connect Timeout=30;" +
+                    "Application Name=DynamicDb";
+            }
+
+            if (Context != null && (Context.Items["DataSourceName"] == null || string.IsNullOrEmpty(Context.Items["DataSourceName"]?.ToString())))
+            {
+                Context.Items["DataSourceName"] = _dataSourceName;
+            }
+
+            if (HttpContext.Current.Session != null && (HttpContext.Current.Session["DataSourceName"] == null || string.IsNullOrEmpty(HttpContext.Current.Session["DataSourceName"]?.ToString())))
+            {
+                HttpContext.Current.Session["DataSourceName"] = _dataSourceName;
+            }
+
+            NavBar.DataSourceName = _dataSourceName;
+
             SqlConnection conn = new SqlConnection(connectionString);
 
             conn.Open();
@@ -125,7 +145,6 @@ namespace DynamicDb.Pages
                 ConnectAndExecuteQuery(connectionString, query);
 
                 _dataSourceName = dataSourceName;
-                Session["_dataSourceName"] = _dataSourceName;
             }
             catch (Exception)
             {

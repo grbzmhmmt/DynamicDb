@@ -13,9 +13,7 @@
             padding: 8px;
         }
     </style>
-
     <script type="text/javascript">
-
         var myColumns = [];
         myColumns.push("txtTblColumn0")
         $(window).ready(function () {
@@ -69,7 +67,7 @@
 
             });
         });
-</script>
+    </script>
 
 </head>
 <body>
@@ -80,7 +78,8 @@
     <form id="form1" runat="server">
         <div class="row">
             <div class="col-md-3 bg-danger p-0">
-                <h3 class="bg-secondary">Create Database<br /></h3>
+                <h3 class="bg-secondary">Create Database<br />
+                </h3>
                 <br />
                 <asp:TextBox CssClass="col-sm-9" ID="txtDbDataSourceName" placeholder="DataSource Name" runat="server"></asp:TextBox>
                 <br />

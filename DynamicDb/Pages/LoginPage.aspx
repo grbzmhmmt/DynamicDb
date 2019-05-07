@@ -14,11 +14,11 @@
             <h1 class="h3 mb-3 font-weight-normal">Please sign in</h1>
             <br />
             <label for="inputEmail" class="sr-only">User Name</label>
-            <asp:TextBox CssClass="form-control" ID="txtLoginUserName" placeholder="UserName" runat="server" required autofocus></asp:TextBox>
+            <asp:TextBox CssClass="form-control" ID="txtLoginUserName" placeholder="UserName" runat="server" required="required" autofocus="autofocus"></asp:TextBox>
             <br />
             <label for="inputPassword" class="sr-only">Password</label>
             <br />
-            <asp:TextBox CssClass="form-control" ID="txtLoginPassword" placeholder="Password" runat="server" required></asp:TextBox>
+            <asp:TextBox CssClass="form-control" ID="txtLoginPassword" placeholder="Password" runat="server" required="required"></asp:TextBox>
             <br />
             <asp:Button CssClass="btn btn-lg col-4 btn-primary btn-block" style="float:right" ID="btnLoginSubmit" runat="server" OnClick="LoginSystem" Text="Login" Width="88px" />
 

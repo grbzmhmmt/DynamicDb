@@ -2,42 +2,99 @@
 using System.Web.UI;
 using System.Web.UI.WebControls;
 using System.Data;
-using System.Configuration;
 using System.Data.SqlClient;
+using System.Web;
 
 namespace DynamicDb.Pages
 {
     public partial class DataManager : Page
     {
+        private string _dataSourceName;
+
         protected void Page_Load(object sender, EventArgs e)
         {
-            try
+            if (string.IsNullOrEmpty(_dataSourceName) && 
+                Context != null && 
+                Context.Items["DataSourceName"] != null && 
+                !string.IsNullOrEmpty(Context.Items["DataSourceName"]?.ToString()))
             {
-                string dataSourceName = Session["_dataSourceName"].ToString();
-                if (string.IsNullOrEmpty(dataSourceName))
-                {
-                    Response.Write("<script>alert('Veri kaynağınız olmadığından Veritabanı yaratma sayfasına yönlendiriliyorsunuz.');</script>");
-                    Response.Redirect("CreateManager.aspx");
-                }
-                else
-                {
-                    if (!this.IsPostBack)
-                    {
-                        this.BindGrid();
-                    }
+                _dataSourceName = Context.Items["DataSourceName"]?.ToString();
+            }
 
-                }
-            } catch (Exception)
+            if (string.IsNullOrEmpty(_dataSourceName) && 
+                HttpContext.Current.Session != null && 
+                HttpContext.Current.Session["DataSourceName"] != null && 
+                !string.IsNullOrEmpty(HttpContext.Current.Session["DataSourceName"]?.ToString()))
+            {
+                _dataSourceName = HttpContext.Current.Session["DataSourceName"] as string;
+            }
+
+            if (string.IsNullOrEmpty(_dataSourceName))
+            {
+                _dataSourceName = Request.QueryString["dataSourceName"];
+            }
+
+            if (string.IsNullOrEmpty(_dataSourceName))
             {
                 Response.Write("<script>alert('Veri kaynağınız olmadığından Veritabanı yaratma sayfasına yönlendiriliyorsunuz.');</script>");
                 Response.Redirect("CreateManager.aspx");
             }
         }
 
+        private string GetConnectionString()
+        {
+            string connectionString = "";
+            if (_dataSourceName == null)
+            {
+                _dataSourceName = Context.Items["DataSourceName"]?.ToString();
+
+                if (!string.IsNullOrEmpty(_dataSourceName))
+                {
+                    if (_dataSourceName.Contains("(LocalDB)\\MSSQLLocalDB"))
+                    {
+                        string dataFileSourceName = "C:\\Github\\DynamicDb\\DynamicDb\\App_Data\\DynamicDatabase.mdf";
+                        connectionString = "Data Source=(LocalDB)\\MSSQLLocalDB;" +
+                            "AttachDbFilename=" + dataFileSourceName + ";" +
+                            "Initial Catalog=Alpha;" +
+                            "Integrated Security=True;" +
+                            "Connect Timeout=30;" +
+                            "Application Name=DynamicDb";
+                    }
+                    else
+                    {
+                        connectionString = "Data Source=" + _dataSourceName + ";Database=master;Trusted_Connection=True;";
+                    }
+                    return connectionString;
+                }
+                return "";
+            } else if (!string.IsNullOrEmpty(_dataSourceName))
+            {
+                if (_dataSourceName.Contains("(LocalDB)\\MSSQLLocalDB"))
+                {
+                    string dataFileSourceName = "C:\\Github\\DynamicDb\\DynamicDb\\App_Data\\DynamicDatabase.mdf";
+                    connectionString = "Data Source=(LocalDB)\\MSSQLLocalDB;" +
+                        "AttachDbFilename=" + dataFileSourceName + ";" +
+                        "Initial Catalog=Alpha;" +
+                        "Integrated Security=True;" +
+                        "Connect Timeout=30;" +
+                        "Application Name=DynamicDb";
+                }
+                else
+                {
+                    connectionString = "Data Source=" + _dataSourceName + ";Database=master;Trusted_Connection=True;";
+                }
+                return connectionString;
+            } else
+            {
+                return "";
+            }
+        }
+
         private void BindGrid()
         {
-            string constr = ConfigurationManager.ConnectionStrings["constr"].ConnectionString;
-            using (SqlConnection con = new SqlConnection(constr))
+            string connectionString = GetConnectionString();
+
+            using (SqlConnection con = new SqlConnection(connectionString))
             {
                 using (SqlCommand cmd = new SqlCommand("Customers_CRUD"))
                 {
@@ -62,8 +119,10 @@ namespace DynamicDb.Pages
         {
             string name = txtName.Text;
             string country = txtCountry.Text;
-            string constr = ConfigurationManager.ConnectionStrings["constr"].ConnectionString;
-            using (SqlConnection con = new SqlConnection(constr))
+
+            string connectionString = GetConnectionString();
+
+            using (SqlConnection con = new SqlConnection(connectionString))
             {
                 using (SqlCommand cmd = new SqlCommand("Customers_CRUD"))
                 {
@@ -98,8 +157,10 @@ namespace DynamicDb.Pages
             int customerId = Convert.ToInt32(GridView1.DataKeys[e.RowIndex].Values[0]);
             string name = (row.FindControl("txtName") as TextBox).Text;
             string country = (row.FindControl("txtCountry") as TextBox).Text;
-            string constr = ConfigurationManager.ConnectionStrings["constr"].ConnectionString;
-            using (SqlConnection con = new SqlConnection(constr))
+
+            string connectionString = GetConnectionString();
+
+            using (SqlConnection con = new SqlConnection(connectionString))
             {
                 using (SqlCommand cmd = new SqlCommand("Customers_CRUD"))
                 {
@@ -129,8 +190,10 @@ namespace DynamicDb.Pages
         protected void OnRowDeleting(object sender, GridViewDeleteEventArgs e)
         {
             int customerId = Convert.ToInt32(GridView1.DataKeys[e.RowIndex].Values[0]);
-            string constr = ConfigurationManager.ConnectionStrings["constr"].ConnectionString;
-            using (SqlConnection con = new SqlConnection(constr))
+
+            string connectionString = GetConnectionString();
+
+            using (SqlConnection con = new SqlConnection(connectionString))
             {
                 using (SqlCommand cmd = new SqlCommand("Customers_CRUD"))
                 {
@@ -145,30 +208,5 @@ namespace DynamicDb.Pages
             }
             this.BindGrid();
         }
-
-        //protected void OnRowDataBound(object sender, EventArgs e)
-        //{
-
-        //}
-
-        //protected void OnRowEditing(object sender, EventArgs e)
-        //{
-
-        //}
-
-        //protected void OnRowCancelingEdit(object sender, EventArgs e)
-        //{
-
-        //}
-
-        //protected void OnRowUpdating(object sender, EventArgs e)
-        //{
-
-        //}
-
-        //protected void OnRowDeleting(object sender, EventArgs e)
-        //{
-
-        //}
     }
 }
