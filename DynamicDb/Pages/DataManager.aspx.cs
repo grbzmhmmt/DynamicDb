@@ -4,12 +4,14 @@ using System.Web.UI.WebControls;
 using System.Data;
 using System.Data.SqlClient;
 using System.Web;
+using System.Collections.Generic;
 
 namespace DynamicDb.Pages
 {
     public partial class DataManager : Page
     {
         private string _dataSourceName;
+        private List<string> columnNames;
 
         protected void Page_Load(object sender, EventArgs e)
         {
@@ -38,6 +40,12 @@ namespace DynamicDb.Pages
             {
                 Response.Write("<script>alert('Veri kaynağınız olmadığından Veritabanı yaratma sayfasına yönlendiriliyorsunuz.');</script>");
                 Response.Redirect("CreateManager.aspx");
+            }
+
+            if (!IsPostBack)
+            {
+                //string connectionString = GetConnectionString();
+                //SELECT name FROM sys.columns WHERE object_id = OBJECT_ID('TABLE_NAME')
             }
         }
 
@@ -90,6 +98,19 @@ namespace DynamicDb.Pages
             }
         }
 
+        private void ConnectAndExecuteQuery(string connectionString, string query)
+        {
+            SqlConnection conn = new SqlConnection(connectionString);
+
+            conn.Open();
+
+            SqlCommand cmd = new SqlCommand(query, conn);
+
+            SqlDataReader dr = cmd.ExecuteReader();
+
+            conn.Close();
+        }
+
         private void BindGrid()
         {
             string connectionString = GetConnectionString();
@@ -124,7 +145,11 @@ namespace DynamicDb.Pages
 
             using (SqlConnection con = new SqlConnection(connectionString))
             {
-                using (SqlCommand cmd = new SqlCommand("Customers_CRUD"))
+                string query = "INSERT INTO t(column_list) " +
+                    "VALUES(value_list)";
+                //string querystr = "INSERT INTO Users SET User_FirstName=@User_FirstName, User_LastName=@User_LastName WHERE User_ID=@User_ID";
+
+                using (SqlCommand cmd = new SqlCommand(query, con))
                 {
                     cmd.CommandType = CommandType.StoredProcedure;
                     cmd.Parameters.AddWithValue("@Action", "INSERT");
@@ -135,8 +160,20 @@ namespace DynamicDb.Pages
                     cmd.ExecuteNonQuery();
                     con.Close();
                 }
+
+                //using (SqlCommand cmd = new SqlCommand(query, con))
+                //{
+                //    cmd.CommandType = CommandType.StoredProcedure;
+                //    cmd.Parameters.AddWithValue("@Action", "INSERT");
+                //    cmd.Parameters.AddWithValue("@Name", name);
+                //    cmd.Parameters.AddWithValue("@Country", country);
+                //    cmd.Connection = con;
+                //    con.Open();
+                //    cmd.ExecuteNonQuery();
+                //    con.Close();
+                //}
             }
-            this.BindGrid();
+            BindGrid();
         }
 
         protected void OnRowEditing(object sender, GridViewEditEventArgs e)

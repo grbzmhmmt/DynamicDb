@@ -17,7 +17,7 @@ namespace DynamicDb.Pages
             userPassword= Request.QueryString["password"];
             databaseName = Request.QueryString["databaseName"];
 
-            if(string.IsNullOrEmpty(userId) || string.IsNullOrEmpty(userName) || string.IsNullOrEmpty(userPassword))
+            if (string.IsNullOrEmpty(userId) || string.IsNullOrEmpty(userName) || string.IsNullOrEmpty(userPassword))
             {
                 //Response.Redirect("NotFound.aspx");
             }

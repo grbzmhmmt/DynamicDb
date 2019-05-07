@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
 using System.Web;
@@ -181,6 +183,7 @@ namespace DynamicDb.Pages
             {
                 string connectionString = "Data Source=" + _dataSourceName + ";Database=" + dbName + ";Trusted_Connection=True;";
                 ConnectAndExecuteQuery(connectionString, query);
+                UpdateTables();
             }
             catch (Exception)
             {
@@ -228,11 +231,42 @@ namespace DynamicDb.Pages
             {
                 string connectionString = "Data Source=" + _dataSourceName + ";Database=" + dbName + ";Trusted_Connection=True;";
                 ConnectAndExecuteQuery(connectionString, query);
+                UpdateTables();
             }
             catch (Exception)
             {
                 Response.Write("<script>alert('Veri Tabanına bağlanırken bir sorunla karşılaşıldı.');</script>");
             }
+        }
+
+        private void UpdateTables()
+        {
+            string connectionString = "Data Source=" + _dataSourceName + ";Database=master;Trusted_Connection=True;";
+
+            if (_dataSourceName.Contains("(LocalDB)\\MSSQLLocalDB"))
+            {
+                string dataFileSourceName = "C:\\Github\\DynamicDb\\DynamicDb\\App_Data\\DynamicDatabase.mdf";
+                connectionString = "Data Source=(LocalDB)\\MSSQLLocalDB;" +
+                    "AttachDbFilename=" + dataFileSourceName + ";" +
+                    "Initial Catalog=Alpha;" +
+                    "Integrated Security=True;" +
+                    "Connect Timeout=30;" +
+                    "Application Name=DynamicDb";
+            }
+
+            SqlConnection conn = new SqlConnection(connectionString);
+
+            conn.Open();
+            DataTable dataBaseTables = conn.GetSchema("Tables");
+            conn.Close();
+            List<string> tables = new List<string>();
+            foreach (DataRow row in dataBaseTables.Rows)
+            {
+                string tablename = (string)row[2];
+                tables.Add(tablename);
+            }
+            TablesGridView.DataSource = tables;
+            TablesGridView.DataBind();
         }
 
         private void GetTables(string dbName)

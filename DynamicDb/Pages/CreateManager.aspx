@@ -118,7 +118,12 @@
                         <asp:TextBox CssClass="col-sm-8" ID="txtGetTblDatabaseName" placeholder="Database Name" runat="server"></asp:TextBox>
                         <asp:Button class="btn btn-success btn-sm col-sm-3 m-1 " type='button' ID='BtnGetTables' OnClick="GetTables_Click" Text="Get Tables" runat="server" />
                         <hr />
-
+                         <asp:GridView ID="TablesGridView" runat="server"></asp:GridView>
+                        <%--<asp:ListView ID="tablesListView" runat="server" DataKeyNames="TableName">
+                            <ItemTemplate>
+                                <p><%#:Item.ProductName%></p>
+                            </ItemTemplate>
+                        </asp:ListView>--%>
                         <%--  <asp:GridView ID="GridViewTables" runat="server" AutoGenerateColumns="False" DataSourceID="SqlDataSourceTables" AllowSorting="True">
                             <Columns>
                                 <asp:BoundField DataField="Tablolar" HeaderText="Tablolar" SortExpression="Tablolar" />
