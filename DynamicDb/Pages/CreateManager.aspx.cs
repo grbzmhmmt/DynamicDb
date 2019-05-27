@@ -5,6 +5,7 @@ using System.Data.SqlClient;
 using System.Linq;
 using System.Web;
 using System.Web.UI;
+using System.Web.UI.WebControls;
 
 namespace DynamicDb.Pages
 {
@@ -299,6 +300,18 @@ namespace DynamicDb.Pages
                 throw;
             }
             */
+        }
+
+        protected void TablesGridRow_Click(object sender, EventArgs e)
+        {
+            GridViewRow selectedRow = TablesGridView.SelectedRow;
+            string tableName = selectedRow.Cells[1].Text.Trim();
+
+            if (!string.IsNullOrEmpty(tableName))
+            {
+                string directAddress = "DataManager.aspx?" + "tableName=" + tableName;
+                Response.Redirect(directAddress);
+            }
         }
     }
 }

@@ -8,11 +8,6 @@
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css">
     <script type="text/javascript" src="https://code.jquery.com/jquery-3.3.1.js"></script>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" />
-    <style type="text/css">
-        div {
-            padding: 8px;
-        }
-    </style>
     <script type="text/javascript">
         var myColumns = [];
         myColumns.push("txtTblColumn0")
@@ -68,7 +63,45 @@
             });
         });
     </script>
+    <style>
+        div {
+            padding: 8px;
+        }
 
+        .app-grid {
+            z-index: 1;
+            width: 80%;
+            border: solid 2px black;
+            min-width: 80%;
+        }
+
+        .grid-header {
+            background-color: #646464;
+            font-family: Arial;
+            color: White;
+            border: none 0px transparent;
+            height: 25px;
+            text-align: center;
+            font-size: 16px;
+        }
+
+        .grid-rows {
+            background-color: #fff;
+            font-family: Arial;
+            font-size: 14px;
+            color: #000;
+            min-height: 25px;
+            text-align: left;
+            border: none 0px transparent;
+        }
+
+        .rows:hover {
+            background-color: #ff8000;
+            font-family: Arial;
+            color: #fff;
+            text-align: left;
+        }
+    </style>
 </head>
 <body>
     <uc:NavBar runat="server" ID="NavBar" />
@@ -118,7 +151,14 @@
                         <asp:TextBox CssClass="col-sm-8" ID="txtGetTblDatabaseName" placeholder="Database Name" runat="server"></asp:TextBox>
                         <asp:Button class="btn btn-success btn-sm col-sm-3 m-1 " type='button' ID='BtnGetTables' OnClick="GetTables_Click" Text="Get Tables" runat="server" />
                         <hr />
-                         <asp:GridView ID="TablesGridView" runat="server"></asp:GridView>
+                        <asp:GridView ID="TablesGridView" runat="server"
+                            CssClass="app-grid"
+                            HeaderStyle-CssClass="grid-header"
+                            RowStyle-CssClass="grid-rows" 
+                            AutoGenerateSelectButton="true"
+                            OnSelectedIndexChanged="TablesGridRow_Click">
+                            <%--OnRowClick="TablesGridRow_Click">--%>
+                        </asp:GridView>
                         <%--<asp:ListView ID="tablesListView" runat="server" DataKeyNames="TableName">
                             <ItemTemplate>
                                 <p><%#:Item.ProductName%></p>

@@ -11,10 +11,12 @@ namespace DynamicDb.Pages
     public partial class DataManager : Page
     {
         private string _dataSourceName;
+        private string _tableName;
         private List<string> columnNames;
 
         protected void Page_Load(object sender, EventArgs e)
         {
+            #region _dataSource degiskenini al
             if (string.IsNullOrEmpty(_dataSourceName) && 
                 Context != null && 
                 Context.Items["DataSourceName"] != null && 
@@ -41,11 +43,24 @@ namespace DynamicDb.Pages
                 Response.Write("<script>alert('Veri kaynağınız olmadığından Veritabanı yaratma sayfasına yönlendiriliyorsunuz.');</script>");
                 Response.Redirect("CreateManager.aspx");
             }
+            #endregion
+            #region create managerde tiklanan tablo adini al
+            if (Request != null && Request.QueryString != null && !string.IsNullOrEmpty(Request.QueryString["tableName"]))
+            {
+                _tableName = Request.QueryString["tableName"];
+            }
+            #endregion
 
             if (!IsPostBack)
             {
-                //string connectionString = GetConnectionString();
-                //SELECT name FROM sys.columns WHERE object_id = OBJECT_ID('TABLE_NAME')
+                BindGrid();
+                //string connectionString = "Data Source=" + _dataSourceName + ";Database=master;Trusted_Connection=True;";
+
+                //SqlConnection conn = new SqlConnection(connectionString);
+
+                //conn.Open();
+                //DataTable dataBaseTables = conn.GetSchema("Tables");
+                //conn.Close();
             }
         }
 
@@ -98,38 +113,85 @@ namespace DynamicDb.Pages
             }
         }
 
-        private void ConnectAndExecuteQuery(string connectionString, string query)
+        //private void ConnectAndExecuteQuery(string connectionString, string query)
+        //{
+        //    SqlConnection conn = new SqlConnection(connectionString);
+
+        //    conn.Open();
+
+        //    SqlCommand cmd = new SqlCommand(query, conn);
+
+        //    SqlDataReader dr = cmd.ExecuteReader();
+
+        //    conn.Close();
+        //}
+
+        public string[] GetColumnsName(string tableName)
         {
-            SqlConnection conn = new SqlConnection(connectionString);
+            string connectionString = GetConnectionString();
+            List<string> listacolumnas = new List<string>();
+            using (SqlConnection connection = new SqlConnection(connectionString))
+            using (SqlCommand command = connection.CreateCommand())
+            {
+                command.CommandText = "select c.name from sys.columns c inner join sys.tables t on t.object_id = c.object_id and t.name = '" + tableName + "' and t.type = 'U'";
+                connection.Open();
+                using (var reader = command.ExecuteReader())
+                {
+                    while (reader.Read())
+                    {
+                        listacolumnas.Add(reader.GetString(0));
+                    }
+                }
+            }
+            return listacolumnas.ToArray();
+        }
 
-            conn.Open();
+        protected void ButtonEditTable_Click(object sender, EventArgs e)
+        {
+            string tableName = TextBoxTableName.Text.Trim();
+            if (!string.IsNullOrEmpty(tableName))
+            {
+                string[] columns = GetColumnsName(tableName);
+                if (columns.Length > 0)
+                {
+                    foreach(string column in columns)
+                    {
+                        BoundField test = new BoundField
+                        {
+                            DataField = column,
+                            HeaderText = column
+                        };
 
-            SqlCommand cmd = new SqlCommand(query, conn);
-
-            SqlDataReader dr = cmd.ExecuteReader();
-
-            conn.Close();
+                        DataEditGridView.Columns.Add(test);
+                    }
+                }
+            } else
+            {
+                Response.Write("<script>alert('Tablo adı giriniz.');</script>");
+            }
         }
 
         private void BindGrid()
         {
-            string connectionString = GetConnectionString();
-
-            using (SqlConnection con = new SqlConnection(connectionString))
+            if (!string.IsNullOrEmpty(_tableName))
             {
-                using (SqlCommand cmd = new SqlCommand("Customers_CRUD"))
+                string connectionString = GetConnectionString();
+                string commandString = "select c.name from sys.columns c inner join sys.tables t on t.object_id = c.object_id and t.name = '" + _tableName + "' and t.type = 'U'";
+
+                using (SqlConnection conn = new SqlConnection(connectionString))
                 {
-                    cmd.Parameters.AddWithValue("@Action", "SELECT");
-                    using (SqlDataAdapter sda = new SqlDataAdapter())
+                    using (SqlCommand cmd = new SqlCommand(commandString, conn))
                     {
-                        cmd.CommandType = CommandType.StoredProcedure;
-                        cmd.Connection = con;
-                        sda.SelectCommand = cmd;
-                        using (DataTable dt = new DataTable())
+                        using (SqlDataAdapter sda = new SqlDataAdapter())
                         {
-                            sda.Fill(dt);
-                            GridView1.DataSource = dt;
-                            GridView1.DataBind();
+                            // cmd.CommandType = CommandType.StoredProcedure;
+                            sda.SelectCommand = cmd;
+                            using (DataTable dt = new DataTable())
+                            {
+                                sda.Fill(dt);
+                                DataEditGridView.DataSource = dt;
+                                DataEditGridView.DataBind();
+                            }
                         }
                     }
                 }
@@ -178,20 +240,20 @@ namespace DynamicDb.Pages
 
         protected void OnRowEditing(object sender, GridViewEditEventArgs e)
         {
-            GridView1.EditIndex = e.NewEditIndex;
+            DataEditGridView.EditIndex = e.NewEditIndex;
             this.BindGrid();
         }
 
         protected void OnRowCancelingEdit(object sender, EventArgs e)
         {
-            GridView1.EditIndex = -1;
+            DataEditGridView.EditIndex = -1;
             this.BindGrid();
         }
 
         protected void OnRowUpdating(object sender, GridViewUpdateEventArgs e)
         {
-            GridViewRow row = GridView1.Rows[e.RowIndex];
-            int customerId = Convert.ToInt32(GridView1.DataKeys[e.RowIndex].Values[0]);
+            GridViewRow row = DataEditGridView.Rows[e.RowIndex];
+            int customerId = Convert.ToInt32(DataEditGridView.DataKeys[e.RowIndex].Values[0]);
             string name = (row.FindControl("txtName") as TextBox).Text;
             string country = (row.FindControl("txtCountry") as TextBox).Text;
 
@@ -212,21 +274,21 @@ namespace DynamicDb.Pages
                     con.Close();
                 }
             }
-            GridView1.EditIndex = -1;
+            DataEditGridView.EditIndex = -1;
             this.BindGrid();
         }
 
         protected void OnRowDataBound(object sender, GridViewRowEventArgs e)
         {
-            if (e.Row.RowType == DataControlRowType.DataRow && e.Row.RowIndex != GridView1.EditIndex)
-            {
-                (e.Row.Cells[2].Controls[2] as LinkButton).Attributes["onclick"] = "return confirm('Do you want to delete this row?');";
-            }
+            //if (e.Row.RowType == DataControlRowType.DataRow && e.Row.RowIndex != DataEditGridView.EditIndex)
+            //{
+            //    (e.Row.Cells[2].Controls[2] as LinkButton).Attributes["onclick"] = "return confirm('Do you want to delete this row?');";
+            //}
         }
 
         protected void OnRowDeleting(object sender, GridViewDeleteEventArgs e)
         {
-            int customerId = Convert.ToInt32(GridView1.DataKeys[e.RowIndex].Values[0]);
+            int customerId = Convert.ToInt32(DataEditGridView.DataKeys[e.RowIndex].Values[0]);
 
             string connectionString = GetConnectionString();
 
