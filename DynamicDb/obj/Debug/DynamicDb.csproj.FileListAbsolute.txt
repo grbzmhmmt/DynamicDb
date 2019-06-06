@@ -118,4 +118,3 @@ C:\Github\DynamicDb\DynamicDb\obj\Debug\DynamicDb.csproj.CoreCompileInputs.cache
 C:\Github\DynamicDb\DynamicDb\obj\Debug\DynamicDb.csproj.CopyComplete
 C:\Github\DynamicDb\DynamicDb\obj\Debug\DynamicDb.dll
 C:\Github\DynamicDb\DynamicDb\obj\Debug\DynamicDb.pdb
-C:\Github\DynamicDb\DynamicDb\obj\Debug\DynamicDb.csprojAssemblyReference.cache

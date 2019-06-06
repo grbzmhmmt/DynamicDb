@@ -95,6 +95,7 @@
     <Content Include="Pages\DataManager.aspx" />
     <Content Include="Pages\LoginPage.aspx" />
     <Content Include="Pages\NotFound.aspx" />
+    <Content Include="Pages\RegisterPage.aspx" />
     <Content Include="Web.config" />
   </ItemGroup>
   <ItemGroup>
@@ -139,6 +140,13 @@
     </Compile>
     <Compile Include="Pages\NotFound.aspx.designer.cs">
       <DependentUpon>NotFound.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\RegisterPage.aspx.cs">
+      <DependentUpon>RegisterPage.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Pages\RegisterPage.aspx.designer.cs">
+      <DependentUpon>RegisterPage.aspx</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

@@ -51,7 +51,7 @@ namespace DynamicDb.Pages
                     userDatabaseName = dr["DatabaseName"].ToString();
 
                     string directAddress = "";
-                    //Kullanıcı veritabanu var mı? Varsa sayfaya onla yönlen.
+                    //Kullanıcı hesabinin veritabanı var mı? Varsa Dashboard sayfasina onla yönlen.
                     if (userDatabaseName != null && userDatabaseName.Trim() != "")
                     {
                         directAddress = "Dashboard.aspx?" + "userId=" + userId + "&userName=" + userName + "&password=" + userPassword + "&databaseName= " + userDatabaseName;
@@ -81,6 +81,28 @@ namespace DynamicDb.Pages
             catch (Exception exception)
             {
                 Console.WriteLine(exception);
+            }
+        }
+
+        protected void RegisterRedirect(object sender, EventArgs e)
+        {
+            try
+            {
+                Response.Redirect("RegisterPage.aspx");
+            }
+            catch (Exception exc0)
+            {
+                Console.WriteLine(exc0);
+                try
+                {
+                    Response.Redirect("Pages/RegisterPage.aspx");
+                }
+                catch (Exception exc1)
+                {
+                    Console.WriteLine(exc1);
+                    //RegisterPage.aspx sayfasindaki toRedirect fonksiyonunu cagir
+                    ClientScript.RegisterStartupScript(this.GetType(), "Redirect", "toRedirect()", true);
+                }                
             }
         }
     }

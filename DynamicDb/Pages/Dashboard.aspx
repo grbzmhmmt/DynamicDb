@@ -26,9 +26,8 @@
                         <asp:HyperLink CssClass="btn btn-sm col-8 btn-secondary offset-2 mt-1 mb-1" NavigateUrl="~/Pages/CreateManager.aspx" ID="btnMyTablesLink" runat="server" Text="My Tables" />
                     </div>
                 </div>
-
                 <div class="col-4 bg-warning">
-                    Charts
+                   
                 </div>
             </div>
         </div>
