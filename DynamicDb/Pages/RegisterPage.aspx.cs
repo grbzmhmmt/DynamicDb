@@ -67,7 +67,7 @@ namespace DynamicDb.Pages
                         Console.WriteLine(exc0);
                         try
                         {
-                            Response.Redirect("Pages/Dashboard.aspx");
+                            Response.Redirect("Dashboard.aspx");
                         }
                         catch (Exception exc1)
                         {

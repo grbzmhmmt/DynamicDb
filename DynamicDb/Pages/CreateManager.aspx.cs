@@ -272,34 +272,97 @@ namespace DynamicDb.Pages
 
         private void GetTables(string dbName)
         {
-            /*
-            try
+            if (string.IsNullOrEmpty(_dataSourceName))
             {
-                string query = "SELECT TABLE_NAME As Tablolar FROM " + dbName + ".INFORMATION_SCHEMA.TABLES WHERE TABLE_TYPE = 'BASE TABLE'";
-
-                SqlConnection conn = new SqlConnection("Data Source=" + dataSourceNameG + ";Database=master;Trusted_Connection=True;");
-                SqlCommand cmd = new SqlCommand(query, conn);
-                conn.Close();
-                conn.Open();
-                SqlDataReader dr = cmd.ExecuteReader();
-                
-                List<string> myTables = new List<string>();
-
-                while (dr.Read())
+                _dataSourceName = txtDbDataSourceName.Text.Replace("\'", "").ToString().Trim();
+                if (string.IsNullOrEmpty(_dataSourceName))
                 {
-                    myTables.Add(dr["Tablolar"].ToString());
+                    Response.Write("<script>alert('Database Source alanınıda doldurunuz.');</script>");
+                } else
+                {
+                    string connectionString = "Data Source=" + _dataSourceName + ";Database=master;Trusted_Connection=True;";
+
+                    if (_dataSourceName.Contains("(LocalDB)\\MSSQLLocalDB"))
+                    {
+                        string dataFileSourceName = "C:\\Github\\DynamicDb\\DynamicDb\\App_Data\\DynamicDatabase.mdf";
+                        connectionString = "Data Source=(LocalDB)\\MSSQLLocalDB;" +
+                            "AttachDbFilename=" + dataFileSourceName + ";" +
+                            "Initial Catalog=Alpha;" +
+                            "Integrated Security=True;" +
+                            "Connect Timeout=30;" +
+                            "Application Name=DynamicDb";
+                    }
+
+                    SqlConnection conn = new SqlConnection(connectionString);
+
+                    conn.Open();
+                    DataTable dataBaseTables = conn.GetSchema("Tables");
+                    conn.Close();
+                    List<string> tables = new List<string>();
+                    foreach (DataRow row in dataBaseTables.Rows)
+                    {
+                        string tablename = (string)row[2];
+                        tables.Add(tablename);
+                    }
+                    TablesGridView.DataSource = tables;
+                    TablesGridView.DataBind();
+                }
+            } else
+            {
+                string connectionString = "Data Source=" + _dataSourceName + ";Database=master;Trusted_Connection=True;";
+
+                if (_dataSourceName.Contains("(LocalDB)\\MSSQLLocalDB"))
+                {
+                    string dataFileSourceName = "C:\\Github\\DynamicDb\\DynamicDb\\App_Data\\DynamicDatabase.mdf";
+                    connectionString = "Data Source=(LocalDB)\\MSSQLLocalDB;" +
+                        "AttachDbFilename=" + dataFileSourceName + ";" +
+                        "Initial Catalog=Alpha;" +
+                        "Integrated Security=True;" +
+                        "Connect Timeout=30;" +
+                        "Application Name=DynamicDb";
                 }
 
-                SqlDataSourceTables.SelectCommand = query;
-                //GridViewTables.DataSource = myTables;
-                dr.Close();
+                SqlConnection conn = new SqlConnection(connectionString);
+
+                conn.Open();
+                DataTable dataBaseTables = conn.GetSchema("Tables");
                 conn.Close();
+                List<string> tables = new List<string>();
+                foreach (DataRow row in dataBaseTables.Rows)
+                {
+                    string tablename = (string)row[2];
+                    tables.Add(tablename);
+                }
+                TablesGridView.DataSource = tables;
+                TablesGridView.DataBind();
             }
-            catch (Exception ex)
-            {
-                throw;
-            }
-            */
+            
+            //try
+            //{
+            //    string query = "SELECT TABLE_NAME As Tablolar FROM " + dbName + ".INFORMATION_SCHEMA.TABLES WHERE TABLE_TYPE = 'BASE TABLE'";
+
+            //    SqlConnection conn = new SqlConnection("Data Source=" + dataSourceNameG + ";Database=master;Trusted_Connection=True;");
+            //    SqlCommand cmd = new SqlCommand(query, conn);
+            //    conn.Close();
+            //    conn.Open();
+            //    SqlDataReader dr = cmd.ExecuteReader();
+                
+            //    List<string> myTables = new List<string>();
+
+            //    while (dr.Read())
+            //    {
+            //        myTables.Add(dr["Tablolar"].ToString());
+            //    }
+
+            //    SqlDataSourceTables.SelectCommand = query;
+            //    //GridViewTables.DataSource = myTables;
+            //    dr.Close();
+            //    conn.Close();
+            //}
+            //catch (Exception ex)
+            //{
+            //    throw;
+            //}            
         }
 
         protected void TablesGridRow_Click(object sender, EventArgs e)
@@ -307,10 +370,24 @@ namespace DynamicDb.Pages
             GridViewRow selectedRow = TablesGridView.SelectedRow;
             string tableName = selectedRow.Cells[1].Text.Trim();
 
-            if (!string.IsNullOrEmpty(tableName))
+            if (string.IsNullOrEmpty(_dataSourceName))
             {
-                string directAddress = "DataManager.aspx?" + "tableName=" + tableName;
-                Response.Redirect(directAddress);
+                _dataSourceName = txtDbDataSourceName.Text.Replace("\'", "").ToString().Trim();
+            }
+
+            if (!string.IsNullOrEmpty(_dataSourceName))
+            {
+                if (string.IsNullOrEmpty(tableName))
+                {
+                    Response.Write("<script>alert('Tablo adı alanınıda doldurunuz.');</script>");
+                } else
+                {
+                    string directAddress = "DataManager.aspx?dataSourceName=" + _dataSourceName + "&tableName=" + tableName;
+                    Response.Redirect(directAddress);
+                }
+            } else
+            {
+                Response.Write("<script>alert('Database Source alanınıda doldurunuz.');</script>");
             }
         }
     }
