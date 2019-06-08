@@ -31,6 +31,15 @@ namespace DynamicDb.Pages {
         protected global::System.Web.UI.WebControls.TextBox txtLoginPassword;
         
         /// <summary>
+        /// BtnRegisterSubmit denetimi.
+        /// </summary>
+        /// <remarks>
+        /// Otomatik üretilmiş alan.
+        /// Değiştirmek için, alan bildirimini tasarımcı dosyasından arka plan kod dosyasına taşıyın.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Button BtnRegisterSubmit;
+        
+        /// <summary>
         /// btnLoginSubmit denetimi.
         /// </summary>
         /// <remarks>

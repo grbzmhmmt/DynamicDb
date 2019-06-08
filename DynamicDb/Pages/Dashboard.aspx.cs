@@ -1,8 +1,9 @@
 ﻿using System;
+using System.Web.UI;
 
 namespace DynamicDb.Pages
 { 
-    public partial class Dashboard : System.Web.UI.Page
+    public partial class Dashboard : Page
     {
         private static string userId;
         private static string userName;
@@ -16,7 +17,7 @@ namespace DynamicDb.Pages
             userPassword= Request.QueryString["password"];
             databaseName = Request.QueryString["databaseName"];
 
-            if(string.IsNullOrEmpty(userId) || string.IsNullOrEmpty(userName) || string.IsNullOrEmpty(userPassword))
+            if (string.IsNullOrEmpty(userId) || string.IsNullOrEmpty(userName) || string.IsNullOrEmpty(userPassword))
             {
                 //Response.Redirect("NotFound.aspx");
             }
