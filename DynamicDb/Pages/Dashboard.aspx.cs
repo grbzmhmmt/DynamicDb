@@ -18,7 +18,7 @@ namespace DynamicDb.Pages
 
             if(string.IsNullOrEmpty(userId) || string.IsNullOrEmpty(userName) || string.IsNullOrEmpty(userPassword))
             {
-                //Response.Redirect("NotFound.aspx");
+                Response.Redirect("NotFound.aspx");
             }
         }
     }

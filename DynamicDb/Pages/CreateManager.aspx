@@ -69,7 +69,7 @@
 
             });
         });
-</script>
+    </script>
 
 </head>
 <body>
@@ -80,7 +80,8 @@
     <form id="form1" runat="server">
         <div class="row">
             <div class="col-md-3 bg-danger p-0">
-                <h3 class="bg-secondary">Create Database<br /></h3>
+                <h3 class="bg-secondary">Create Database<br />
+                </h3>
                 <br />
                 <asp:TextBox CssClass="col-sm-9" ID="txtDbDataSourceName" placeholder="DataSource Name" runat="server"></asp:TextBox>
                 <br />
@@ -116,24 +117,27 @@
                 <h3 class="bg-secondary text-center">Your Tables</h3>
                 <div class="row">
                     <div class="col-12">
-                        <asp:TextBox CssClass="col-sm-8" ID="txtGetTblDatabaseName" placeholder="Database Name" runat="server"></asp:TextBox>
-                        <asp:Button class="btn btn-success btn-sm col-sm-3 m-1 " type='button' ID='getTables' OnClick="getTables_Click" Text="Get Tables" runat="server" />
-                        <hr />
+                        <div class="row">
+                            <div class="col-sm-8">
+                                <asp:TextBox CssClass="col-12" ID="txtGetTblDatabaseName" placeholder="Database Name" runat="server"></asp:TextBox>
 
-                        <%--  <asp:GridView ID="GridViewTables" runat="server" AutoGenerateColumns="False" DataSourceID="SqlDataSourceTables" AllowSorting="True">
+                            </div>
+                            <div class="col-sm-3" style>
+                                <asp:Button class="btn btn-success btn-sm m-l-1 m-b-1 " type='button' ID='getTables' OnClick="getTables_Click" Text="Get Tables" runat="server" />
+                            </div>
+                        </div>
+                        <asp:GridView ID="GridViewTables" runat="server" AutoGenerateColumns="False" DataSourceID="SqlDataSourceTables" AllowSorting="True">
                             <Columns>
                                 <asp:BoundField DataField="Tablolar" HeaderText="Tablolar" SortExpression="Tablolar" />
-                                <asp:TemplateField ShowHeader="False">
-                                    <ItemTemplate>
-                                        <asp:LinkButton ID="LinkButton1" runat="server" CausesValidation="False" CommandName="Select" Text="Select"></asp:LinkButton>
-                                    </ItemTemplate>
-                                </asp:TemplateField>
                             </Columns>
                         </asp:GridView>
 
-                        <asp:SqlDataSource ID="SqlDataSourceTables" runat="server" ConnectionString="<%$ ConnectionStrings:masterConnectionString %>" SelectCommand="SELECT TABLE_NAME AS Tablolar
-FROM deneme.INFORMATION_SCHEMA.TABLES 
-WHERE TABLE_TYPE = 'BASE TABLE'"></asp:SqlDataSource>--%>
+
+
+                        <asp:SqlDataSource ID="SqlDataSourceTables" runat="server" ConnectionString="<%$ ConnectionStrings:denemeConnectionString %>"
+                            SelectCommand="SELECT TABLE_NAME AS Tablolar
+                            FROM deneme.INFORMATION_SCHEMA.TABLES 
+                            WHERE TABLE_TYPE = 'BASE TABLE'"></asp:SqlDataSource>
                     </div>
                 </div>
             </div>

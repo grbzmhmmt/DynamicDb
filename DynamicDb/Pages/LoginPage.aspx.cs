@@ -10,7 +10,7 @@ namespace DynamicDb.Pages
         private string userName;
         private string userPassword;
         private string userDatabaseName;
-        private string dataSourceName= "DESKTOP - 6UQLI0L";
+        private string dataSourceName= "DESKTOP-6UQLI0L";
         private string databaseName = "SqlDynamicDbMyUsers";
         private string dataFileSourceName = "C:\\Github\\DynamicDb\\DynamicDb\\App_Data\\DynamicDatabase.mdf";
 
@@ -23,13 +23,14 @@ namespace DynamicDb.Pages
 
         protected void Page_Load(object sender, EventArgs e)
         {
-            sqlConnection = "Data Source=(LocalDB)\\MSSQLLocalDB;" +
-            "AttachDbFilename=" + dataFileSourceName + ";" +
-            "Initial Catalog=Alpha;" +
-            "Integrated Security=True;" +
-            "Connect Timeout=30;" +
-            "Application Name=DynamicDb";
+            //sqlConnection = "Data Source=(LocalDB)\\MSSQLLocalDB;" +
+            //"AttachDbFilename=" + dataFileSourceName + ";" +
+            //"Initial Catalog=Alpha;" +
+            //"Integrated Security=True;" +
+            //"Connect Timeout=30;" +
+            //"Application Name=DynamicDb";
         }
+
 
         protected void LoginSystem(object sender, EventArgs e)
         {
@@ -38,12 +39,12 @@ namespace DynamicDb.Pages
                 userName = txtLoginUserName.Text.Replace("\'", "").ToString(); ;
                 userPassword = txtLoginPassword.Text.Replace("\'", "").ToString();
                 //Temel Database e bağlantı kuruluyor
-                //SqlConnection conn = new SqlConnection(
-                //    "Data Source="+dataSourceName+"" +
-                //    " ;Database="+ databaseName +
-                //    " ;Trusted_Connection=True;"
-                //);
-                SqlConnection conn = new SqlConnection(sqlConnection);
+                SqlConnection conn = new SqlConnection(
+                    "Data Source=" + dataSourceName + "" +
+                    " ;Database=" + databaseName +
+                    " ;Trusted_Connection=True;"
+                );
+                //SqlConnection conn = new SqlConnection(sqlConnection);
 
                 //ilgili Kullanıcı varmı diye sorgu atılıyor
                 string query = "select * from Users where UserName='" + userName + "' and Password='" + userPassword + "'";
@@ -52,29 +53,30 @@ namespace DynamicDb.Pages
 
                 SqlDataReader dr = cmd.ExecuteReader();
 
-                if (dr.Read())//kullanıcı kontrolü
+               if (dr.Read())//kullanıcı kontrolü
                 {
                     userId = dr["UserId"].ToString();
                     //Kullanıcı nın Database adı için sorgu
-                    //string query1 = "select DatabaseName from UsersDatabase where UserId= '" + userId + "' and UserName='" + userName + "' and Password='" + userPassword + "'";
-                    //SqlCommand cmd1 = new SqlCommand(query1, conn);
+                    string query1 = "select DatabaseName from UsersDatabase where UserId= '" + userId + "' and UserName='" + userName + "' and UserPass='" + userPassword + "'";
+                    SqlCommand cmd1 = new SqlCommand(query1, conn);
                     query = "SELECT user FROM " + "Users" + " WHERE UserId = '" + userId + "' AND UserName = '" + userName + "' AND Password = '" + userPassword + "'";
 
-                    cmd = new SqlCommand(query, conn);
+                    cmd1 = new SqlCommand(query1, conn);
+                    //cmd1 = new SqlCommand(query, conn);
 
                     dr.Close();
-                    //SqlDataReader dr1 = cmd1.ExecuteReader();
-                    dr = cmd.ExecuteReader();
+                    SqlDataReader dr1 = cmd1.ExecuteReader();
+                    //dr = cmd.ExecuteReader();
 
                     string directAddress="";
 
                     //Kullanıcı nın Database adı olmasına göre dashboarda parametre gönderiliyor
-                    if (dr.Read()) //(dr1.Read())
+                    if (dr1.Read()) // (dr.Read())
                     {
-                        //userDatabaseName = dr1["DatabaseName"].ToString();
-                        string user = dr["user"].ToString();
-                        //directAddress = "Dashboard.aspx?" + "userId=" + userId + "&userName=" + userName + "&password=" + userPassword + "&databaseName= " + userDatabaseName;
-                        directAddress = "Dashboard.aspx?" + "userId=" + userId + "&userName=" + userName + "&password=" + userPassword + "&databaseName= " + user;
+                        userDatabaseName = dr1["DatabaseName"].ToString();
+                        //string user = dr["user"].ToString();
+                        directAddress = "Dashboard.aspx?" + "userId=" + userId + "&userName=" + userName + "&password=" + userPassword + "&databaseName= " + userDatabaseName;
+                        //directAddress = "Dashboard.aspx?" + "userId=" + userId + "&userName=" + userName + "&password=" + userPassword + "&databaseName= " + user;
                     }
                     else
                     {
@@ -88,10 +90,17 @@ namespace DynamicDb.Pages
                 }
                 conn.Close();
             }
-            catch (Exception exception)
+
+            catch (Exception ex)
             {
-                Console.WriteLine(exception);
+                Console.WriteLine(ex);
             }
+
+
+
+
         }
+
+
     }
 }

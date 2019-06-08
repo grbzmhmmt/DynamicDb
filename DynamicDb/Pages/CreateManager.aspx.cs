@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.Linq;
 
@@ -39,7 +40,7 @@ namespace DynamicDb.Pages
                 {
                     CreateTableWithForeignKey(databaseNameG, tableNameG, myArray, primaryKeyG, foreignKeyG, foreingKeyRefTableG, foreignKeyRefColumnG);
                 }
-                catch (Exception)
+                catch (Exception ex)
                 {
 
                     Response.Write("<script>alert('Foreign Hatası');</script>");
@@ -52,7 +53,7 @@ namespace DynamicDb.Pages
                     isQuerySuccess = CreateTableWithPrimaryKey(databaseNameG, tableNameG, myArray, primaryKeyG);
 
                 }
-                catch (Exception)
+                catch (Exception ex)
                 {
                     Response.Write("<script>alert('PrimaryKey Hatası');</script>");
                 }
@@ -103,7 +104,7 @@ namespace DynamicDb.Pages
                 conn.Close();
                 return true;
             }
-            catch (Exception)
+            catch (Exception ex)
             {
                 return false;
             }
@@ -145,7 +146,7 @@ namespace DynamicDb.Pages
 
                 return true;
             }
-            catch (Exception)
+            catch (Exception ex)
             {
                 return false;
             }
@@ -186,7 +187,7 @@ namespace DynamicDb.Pages
                     cmd.ExecuteNonQuery();
                     conn.Close();
                 }
-                catch (Exception)
+                catch (Exception ex)
                 {
                     Response.Write("<script>alert('Lütfen Database İsmi Giriniz');</script>");
                 }
@@ -208,36 +209,48 @@ namespace DynamicDb.Pages
 
         protected void GetTables(string dbName)
         {
-            /*
-            try
+            if (!string.IsNullOrEmpty(dbName))
             {
-                string query = "SELECT TABLE_NAME As Tablolar FROM " + dbName + ".INFORMATION_SCHEMA.TABLES WHERE TABLE_TYPE = 'BASE TABLE'";
-
-                SqlConnection conn = new SqlConnection("Data Source=" + dataSourceNameG + ";Database=master;Trusted_Connection=True;");
-                SqlCommand cmd = new SqlCommand(query, conn);
-                conn.Close();
-                conn.Open();
-                SqlDataReader dr = cmd.ExecuteReader();
-                
-                List<string> myTables = new List<string>();
-
-                while (dr.Read())
+                try
                 {
-                    myTables.Add(dr["Tablolar"].ToString());
+
+                    SqlDataSourceTables.SelectCommand = "SELECT TABLE_NAME As Tablolar FROM " + dbName + ".INFORMATION_SCHEMA.TABLES WHERE TABLE_TYPE = 'BASE TABLE'";
+
+                    #region kontrol edilip silinecek
+                    /*
+                    string query = "SELECT TABLE_NAME As Tablolar FROM " + dbName + ".INFORMATION_SCHEMA.TABLES WHERE TABLE_TYPE = 'BASE TABLE'";
+
+                    SqlConnection conn = new SqlConnection("Data Source=" + dataSourceNameG + ";Database=master;Trusted_Connection=True;");
+
+                    SqlCommand cmd = new SqlCommand(query, conn);
+                    conn.Close();
+                    conn.Open();
+                    SqlDataReader dr = cmd.ExecuteReader();
+
+                    List<string> myTables = new List<string>();
+
+                    while (dr.Read())
+                    {
+                        myTables.Add(dr["Tablolar"].ToString());
+                    }
+
+                    //SqlDataSourceTables.SelectCommand = query;
+                    //GridViewTables.DataSource = myTables;
+                    dr.Close();
+                    conn.Close();
+                    */
+                    #endregion
+                }
+                catch (Exception ex)
+                {
+                    Response.Write("<script>alert('Database Çağıra işlemi hatalı yöneticinize danışınız!');</script>");
                 }
 
-                SqlDataSourceTables.SelectCommand = query;
-                //GridViewTables.DataSource = myTables;
-                dr.Close();
-                conn.Close();
             }
-            catch (Exception ex)
+            else
             {
-
-                throw;
+                Response.Write("<script>alert('Lütfen Database İsmi Giriniz');</script>");
             }
-            */
-
         }
     }
 }
