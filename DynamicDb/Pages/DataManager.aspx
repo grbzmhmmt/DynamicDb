@@ -14,57 +14,52 @@
     <uc:NavBar runat="server" ID="NavBar" />
 
     <form id="form1" runat="server">
-        <asp:TextBox CssClass="col-sm-4" ID="TextBoxTableName" placeholder="Table Name" runat="server"></asp:TextBox>
-        <asp:Button CssClass="btn btn-info btn-sm m-1" ID="ButtonEditTable" runat="server" OnClick="ButtonEditTable_Click" Text="Create" Width="88px" />
-        
-        <asp:GridView ID="DataEditGridView" runat="server" AutoGenerateColumns="false"
-            OnRowDataBound="OnRowDataBound" OnRowEditing="OnRowEditing" OnRowCancelingEdit="OnRowCancelingEdit"
-            OnRowUpdating="OnRowUpdating" OnRowDeleting="OnRowDeleting" EmptyDataText="No records has been added.">
-        <Columns>
-            <asp:TemplateField HeaderText="Name" ItemStyle-Width="150">
-                <ItemTemplate>
-                    <asp:Label ID="lblName" runat="server" Text='<%# Eval("Name") %>'></asp:Label>
-                </ItemTemplate>
-                <EditItemTemplate>
-                    <asp:TextBox ID="txtName" runat="server" Text='<%# Eval("Name") %>'></asp:TextBox>
-                </EditItemTemplate>
-            </asp:TemplateField>
-            <asp:CommandField ButtonType="Link" ShowEditButton="true" ShowDeleteButton="true" ItemStyle-Width="150" />
-        </Columns>
-    </asp:GridView>
-    <table border="1" style="border-collapse: collapse">
-        <tr>
-            <td style="width: 150px">
-                Name:<br />
-                <asp:TextBox ID="txtName" runat="server" Width="140" />
-            </td>
-            <td style="width: 150px">
-                Country:<br />
-                <asp:TextBox ID="txtCountry" runat="server" Width="140" />
-            </td>
-            <td style="width: 100px">
-                <asp:Button ID="btnAdd" runat="server" Text="Add" OnClick="Insert" />
-            </td>
-        </tr>
-    </table>
+        <div class="active">
+            <asp:Button ID="ButtonAddNewRow" runat="server" Text="Add New Row" OnClick="ButtonAddNewRow_Click" />
+            <asp:Button ID="ButtonAddNewColumn" runat="server" Text="Add New Column" OnClick="ButtonAddNewColumn_Click" />
+            <div>
+                <asp:Button ID="SubmitNewRow" runat="server" Text="Add" OnClick="SubmitNewRow_Click" Visible="false"/>
+                <asp:Button ID="CancelAddRow" runat="server" Text="Cancel" OnClick="CancelAddRow_Click" Visible="false" />
+                <asp:Button ID="SubmitNewColumn" runat="server" Text="Add" OnClick="SubmitNewColumn_Click" Visible="false"/>
+                <asp:Button ID="CancelAddColumn" runat="server" Text="Cancel" OnClick="CancelAddColumn_Click" Visible="false" />
+                <asp:Panel ID="PanelAddNewRow" runat="server" Visible="false">      
+                </asp:Panel>
+                <asp:Panel ID="PanelAddNewColumn" runat="server" Visible="false">
+                    <asp:TextBox ID="TextBoxNewColumnName" runat="server"></asp:TextBox>
+                </asp:Panel>          
+            </div>
+        </div>
+        <asp:SqlDataSource ID="DataSource" runat="server"
+            ConflictDetection="CompareAllValues"
+            ConnectionString="<%$ ConnectionStrings:ConnectionString %>"
+            OldValuesParameterFormatString="original_{0}"
+            SelectCommand="SELECT * FROM [DefaultTable]"
+            DeleteCommand="DELETE FROM [DefaultTable] WHERE [Id] = @original_Id AND [GenericNotNull] = @original_GenericNotNull AND (([GenericNull] = @original_GenericNull) OR ([GenericNull] IS NULL AND @original_GenericNull IS NULL))"
+            UpdateCommand="UPDATE [DefaultTable] SET [GenericNotNull] = @GenericNotNull, [GenericNull] = @GenericNull WHERE [Id] = @original_Id AND [GenericNotNull] = @original_GenericNotNull AND (([GenericNull] = @original_GenericNull) OR ([GenericNull] IS NULL AND @original_GenericNull IS NULL))" InsertCommand="INSERT INTO [DefaultTable] ([GenericNotNull], [GenericNull]) VALUES (@GenericNotNull, @GenericNull)">
+            <DeleteParameters>
+                <asp:Parameter Name="original_Id" Type="Int32" />
+                <asp:Parameter Name="original_GenericNotNull" Type="String" />
+                <asp:Parameter Name="original_GenericNull" Type="String" />
+            </DeleteParameters>
+            <InsertParameters>
+                <asp:Parameter Name="GenericNotNull" Type="String" />
+                <asp:Parameter Name="GenericNull" Type="String" />
+            </InsertParameters>
+            <UpdateParameters>
+                <asp:Parameter Name="GenericNotNull" Type="String" />
+                <asp:Parameter Name="GenericNull" Type="String" />
+                <asp:Parameter Name="original_Id" Type="Int32" />
+                <asp:Parameter Name="original_GenericNotNull" Type="String" />
+                <asp:Parameter Name="original_GenericNull" Type="String" />
+            </UpdateParameters>
+        </asp:SqlDataSource>
+        <asp:GridView ID="DataGridView" runat="server" AllowPaging="True" AllowSorting="True" AutoGenerateColumns="False" DataKeyNames="Id" DataSourceID="DataSource" ShowHeaderWhenEmpty="True">
+            <Columns>
+                <asp:BoundField DataField="Id" HeaderText="Id" InsertVisible="False" ReadOnly="True" SortExpression="Id" />
+                <asp:BoundField DataField="GenericNotNull" HeaderText="GenericNotNull" SortExpression="GenericNotNull" />
+                <asp:BoundField DataField="GenericNull" HeaderText="GenericNull" SortExpression="GenericNull" />
+            </Columns>
+        </asp:GridView>
     </form>
-
-    <%--<asp:GridView runat="server" ID="GridView"  AutoGenerateColumns="false"
-        DataKeyNames="<%# Eval("userPrimaryKey") %>"
-        OnRowDataBound="OnRowDataBound"
-        OnRowEditing="OnRowEditing"
-        OnRowCancelingEdit="OnRowCancelingEdit"
-        OnRowUpdating="OnRowUpdating" 
-        OnRowDeleting="OnRowDeleting" 
-        EmptyDataText="Veri yok.">
-        <columns>
-          <asp:boundfield datafield="CustomerID" headertext="Customer ID"/>
-          <asp:boundfield datafield="CompanyName" headertext="Company Name"/>
-          <asp:boundfield datafield="Address" headertext="Address"/>
-          <asp:boundfield datafield="City" headertext="City"/>
-          <asp:boundfield datafield="PostalCode" headertext="Postal Code"/>
-          <asp:boundfield datafield="Country" headertext="Country"/>
-        </columns>
-    </asp:GridView>--%>
 </body>
 </html>

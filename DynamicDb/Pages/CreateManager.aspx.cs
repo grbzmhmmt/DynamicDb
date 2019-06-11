@@ -23,6 +23,7 @@ namespace DynamicDb.Pages
             string databaseName = txtDbDatabaseName.Text.Replace("\'", "").ToString().Trim();
             if (!string.IsNullOrEmpty(databaseName) && !string.IsNullOrEmpty(dataSourceName))
             {
+                HttpContext.Current.Session["DataBaseName"] = databaseName;
                 CreateDatabase(databaseName, dataSourceName);
             }
             else
@@ -90,6 +91,7 @@ namespace DynamicDb.Pages
             string dbName = txtGetTblDatabaseName.Text.Replace("\'", "").ToString();
             if (!string.IsNullOrEmpty(dbName))
             {
+                HttpContext.Current.Session["DataBaseName"] = dbName;
                 GetTables(dbName);
             }
         }
@@ -160,7 +162,7 @@ namespace DynamicDb.Pages
             string query = "";
             if (!string.IsNullOrEmpty(primaryKey))
             {
-                query = "CREATE TABLE " + tableName + "(" + primaryKey + " int NOT NULL,";
+                query = "CREATE TABLE " + tableName + "(" + primaryKey + " int IDENTITY (1, 1) NOT NULL,";
 
                 foreach (var column in columns)
                 {
@@ -198,7 +200,7 @@ namespace DynamicDb.Pages
             if (!string.IsNullOrEmpty(primaryKey))
             {
                 query = "CREATE TABLE " + tableName +
-                    "(" + primaryKey + " int NOT NULL," +
+                    "(" + primaryKey + " int IDENTITY (1, 1) NOT NULL," +
                     "  [" + foreignKey + "] int NOT NULL," +
                     "PRIMARY KEY CLUSTERED (" + primaryKey + " ASC)";
 
@@ -369,6 +371,7 @@ namespace DynamicDb.Pages
         {
             GridViewRow selectedRow = TablesGridView.SelectedRow;
             string tableName = selectedRow.Cells[1].Text.Trim();
+            string databaseName = txtGetTblDatabaseName.Text.Replace("\'", "").ToString().Trim();
 
             if (string.IsNullOrEmpty(_dataSourceName))
             {
@@ -382,7 +385,7 @@ namespace DynamicDb.Pages
                     Response.Write("<script>alert('Tablo adı alanınıda doldurunuz.');</script>");
                 } else
                 {
-                    string directAddress = "DataManager.aspx?dataSourceName=" + _dataSourceName + "&tableName=" + tableName;
+                    string directAddress = "DataManager.aspx?dataSourceName=" + _dataSourceName + "&dataBaseName=" + databaseName + "&tableName=" + tableName;
                     Response.Redirect(directAddress);
                 }
             } else

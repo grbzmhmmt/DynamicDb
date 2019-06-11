@@ -27,3 +27,14 @@ $RECYCLE.BIN/
 .vs/DynamicDb/v15/Server/sqlite3/storage.ide
 .vs/DynamicDb/v15/Server/sqlite3/storage.ide-shm
 .vs/DynamicDb/v15/Server/sqlite3/storage.ide-wal
+.vs/DynamicDb/v15/.suo
+.vs/DynamicDb/v15/Server/sqlite3/storage.ide
+.vs/DynamicDb/v15/Server/sqlite3/storage.ide-shm
+.vs/DynamicDb/v15/Server/sqlite3/storage.ide-wal
+DynamicDb/App_Data/DynamicDatabase.mdf
+DynamicDb/App_Data/DynamicDatabase_log.ldf
+DynamicDb/bin/DynamicDb.dll
+DynamicDb/bin/DynamicDb.dll.config
+DynamicDb/bin/DynamicDb.pdb
+DynamicDb/obj/Debug/DynamicDb.pdb
+DynamicDb/obj/Debug/DynamicDb.dll

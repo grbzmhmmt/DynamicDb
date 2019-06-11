@@ -31,57 +31,102 @@ namespace DynamicDb.Pages {
         protected global::System.Web.UI.HtmlControls.HtmlForm form1;
         
         /// <summary>
-        /// TextBoxTableName denetimi.
+        /// ButtonAddNewRow denetimi.
         /// </summary>
         /// <remarks>
         /// Otomatik üretilmiş alan.
         /// Değiştirmek için, alan bildirimini tasarımcı dosyasından arka plan kod dosyasına taşıyın.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.TextBox TextBoxTableName;
+        protected global::System.Web.UI.WebControls.Button ButtonAddNewRow;
         
         /// <summary>
-        /// ButtonEditTable denetimi.
+        /// ButtonAddNewColumn denetimi.
         /// </summary>
         /// <remarks>
         /// Otomatik üretilmiş alan.
         /// Değiştirmek için, alan bildirimini tasarımcı dosyasından arka plan kod dosyasına taşıyın.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Button ButtonEditTable;
+        protected global::System.Web.UI.WebControls.Button ButtonAddNewColumn;
         
         /// <summary>
-        /// DataEditGridView denetimi.
+        /// SubmitNewRow denetimi.
         /// </summary>
         /// <remarks>
         /// Otomatik üretilmiş alan.
         /// Değiştirmek için, alan bildirimini tasarımcı dosyasından arka plan kod dosyasına taşıyın.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.GridView DataEditGridView;
+        protected global::System.Web.UI.WebControls.Button SubmitNewRow;
         
         /// <summary>
-        /// txtName denetimi.
+        /// CancelAddRow denetimi.
         /// </summary>
         /// <remarks>
         /// Otomatik üretilmiş alan.
         /// Değiştirmek için, alan bildirimini tasarımcı dosyasından arka plan kod dosyasına taşıyın.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.TextBox txtName;
+        protected global::System.Web.UI.WebControls.Button CancelAddRow;
         
         /// <summary>
-        /// txtCountry denetimi.
+        /// SubmitNewColumn denetimi.
         /// </summary>
         /// <remarks>
         /// Otomatik üretilmiş alan.
         /// Değiştirmek için, alan bildirimini tasarımcı dosyasından arka plan kod dosyasına taşıyın.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.TextBox txtCountry;
+        protected global::System.Web.UI.WebControls.Button SubmitNewColumn;
         
         /// <summary>
-        /// btnAdd denetimi.
+        /// CancelAddColumn denetimi.
         /// </summary>
         /// <remarks>
         /// Otomatik üretilmiş alan.
         /// Değiştirmek için, alan bildirimini tasarımcı dosyasından arka plan kod dosyasına taşıyın.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Button btnAdd;
+        protected global::System.Web.UI.WebControls.Button CancelAddColumn;
+        
+        /// <summary>
+        /// PanelAddNewRow denetimi.
+        /// </summary>
+        /// <remarks>
+        /// Otomatik üretilmiş alan.
+        /// Değiştirmek için, alan bildirimini tasarımcı dosyasından arka plan kod dosyasına taşıyın.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Panel PanelAddNewRow;
+        
+        /// <summary>
+        /// PanelAddNewColumn denetimi.
+        /// </summary>
+        /// <remarks>
+        /// Otomatik üretilmiş alan.
+        /// Değiştirmek için, alan bildirimini tasarımcı dosyasından arka plan kod dosyasına taşıyın.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Panel PanelAddNewColumn;
+        
+        /// <summary>
+        /// TextBoxNewColumnName denetimi.
+        /// </summary>
+        /// <remarks>
+        /// Otomatik üretilmiş alan.
+        /// Değiştirmek için, alan bildirimini tasarımcı dosyasından arka plan kod dosyasına taşıyın.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.TextBox TextBoxNewColumnName;
+        
+        /// <summary>
+        /// DataSource denetimi.
+        /// </summary>
+        /// <remarks>
+        /// Otomatik üretilmiş alan.
+        /// Değiştirmek için, alan bildirimini tasarımcı dosyasından arka plan kod dosyasına taşıyın.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.SqlDataSource DataSource;
+        
+        /// <summary>
+        /// DataGridView denetimi.
+        /// </summary>
+        /// <remarks>
+        /// Otomatik üretilmiş alan.
+        /// Değiştirmek için, alan bildirimini tasarımcı dosyasından arka plan kod dosyasına taşıyın.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.GridView DataGridView;
     }
 }
