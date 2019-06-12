@@ -112,6 +112,15 @@ namespace DynamicDb.Pages {
         protected global::System.Web.UI.WebControls.TextBox TextBoxNewColumnName;
         
         /// <summary>
+        /// DropDownListNewColumnTypes denetimi.
+        /// </summary>
+        /// <remarks>
+        /// Otomatik üretilmiş alan.
+        /// Değiştirmek için, alan bildirimini tasarımcı dosyasından arka plan kod dosyasına taşıyın.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.DropDownList DropDownListNewColumnTypes;
+        
+        /// <summary>
         /// DataSource denetimi.
         /// </summary>
         /// <remarks>

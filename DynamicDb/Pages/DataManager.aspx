@@ -17,15 +17,20 @@
         <div class="active">
             <asp:Button ID="ButtonAddNewRow" runat="server" Text="Add New Row" OnClick="ButtonAddNewRow_Click" />
             <asp:Button ID="ButtonAddNewColumn" runat="server" Text="Add New Column" OnClick="ButtonAddNewColumn_Click" />
-            <div>
-                <asp:Button ID="SubmitNewRow" runat="server" Text="Add" OnClick="SubmitNewRow_Click" Visible="false"/>
-                <asp:Button ID="CancelAddRow" runat="server" Text="Cancel" OnClick="CancelAddRow_Click" Visible="false" />
-                <asp:Button ID="SubmitNewColumn" runat="server" Text="Add" OnClick="SubmitNewColumn_Click" Visible="false"/>
-                <asp:Button ID="CancelAddColumn" runat="server" Text="Cancel" OnClick="CancelAddColumn_Click" Visible="false" />
-                <asp:Panel ID="PanelAddNewRow" runat="server" Visible="false">      
-                </asp:Panel>
+            <asp:Button ID="SubmitNewRow" runat="server" Text="Add" OnClick="SubmitNewRow_Click" Visible="false"/>
+            <asp:Button ID="CancelAddRow" runat="server" Text="Cancel" OnClick="CancelAddRow_Click" Visible="false" />
+            <asp:Button ID="SubmitNewColumn" runat="server" Text="Add" OnClick="SubmitNewColumn_Click" Visible="false"/>
+            <asp:Button ID="CancelAddColumn" runat="server" Text="Cancel" OnClick="CancelAddColumn_Click" Visible="false" />
+            <div>                
+                <asp:Panel ID="PanelAddNewRow" runat="server" Visible="false"></asp:Panel>
                 <asp:Panel ID="PanelAddNewColumn" runat="server" Visible="false">
                     <asp:TextBox ID="TextBoxNewColumnName" runat="server"></asp:TextBox>
+                    <asp:DropDownList ID="DropDownListNewColumnTypes" runat="server">
+                        <asp:ListItem>number</asp:ListItem>
+                        <asp:ListItem>string</asp:ListItem>
+                        <asp:ListItem>date</asp:ListItem>
+                        <asp:ListItem>image</asp:ListItem>
+                    </asp:DropDownList>
                 </asp:Panel>          
             </div>
         </div>

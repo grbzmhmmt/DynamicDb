@@ -68,6 +68,15 @@ namespace DynamicDb.Pages
             }
             #endregion
 
+            SetVisibilitiesToFalse();
+
+            GenerateAddRowTextBoxes();
+
+            BindGrid();
+        }
+        
+        private void SetVisibilitiesToFalse()
+        {
             SubmitNewRow.Visible = false;
             CancelAddRow.Visible = false;
 
@@ -75,10 +84,30 @@ namespace DynamicDb.Pages
             CancelAddColumn.Visible = false;
 
             PanelAddNewRow.Visible = false;
+            PanelAddNewColumn.Visible = false;
+        }
 
-            if (!IsPostBack)
+        private void GenerateAddRowTextBoxes()
+        {
+            string[] tableColumnNames = GetColumnsName(_tableName);
+
+            for (int i = 1; i < tableColumnNames.Length; i++)
             {
-                BindGrid();
+                string columnName = tableColumnNames[i];
+
+                TextBox addNewRowTextBox = new TextBox
+                {
+                    ID = "AddNewRow" + columnName,
+                    Text = columnName
+                };
+
+                addNewRowTextBox.Attributes.Add("placeholder", columnName);
+                PanelAddNewRow.Controls.Add(addNewRowTextBox);
+
+                if (i % 5 == 0)
+                {
+                    PanelAddNewRow.Controls.Add(new LiteralControl("<br />"));
+                }
             }
         }
 
@@ -153,7 +182,6 @@ namespace DynamicDb.Pages
         {
             CreateSqlDataSource();
             CreateSqlDataGridView();
-            DataGridView.DataSourceID = "DataSource";
             DataGridView.DataBind();
         }
 
@@ -287,31 +315,12 @@ namespace DynamicDb.Pages
 
                 DataGridView.Columns.Add(boundField);
             }
+
+            DataGridView.DataSourceID = "DataSource";
         }
 
         protected void ButtonAddNewRow_Click(object sender, EventArgs e)
         {
-            string[] tableColumnNames = GetColumnsName(_tableName);
-
-            for (int i = 1; i < tableColumnNames.Length; i++)
-            {
-                string columnName = tableColumnNames[i];
-
-                TextBox addNewRowTextBox = new TextBox
-                {
-                    ID = "AddNewRow" + columnName,
-                    Text = columnName
-                };
-
-                addNewRowTextBox.Attributes.Add("placeholder", columnName);
-                PanelAddNewRow.Controls.Add(addNewRowTextBox);
-
-                if (i % 5 == 0)
-                {
-                    PanelAddNewRow.Controls.Add(new LiteralControl("<br />"));
-                }
-            }
-
             SubmitNewRow.Visible = true;
             CancelAddRow.Visible = true;
             PanelAddNewRow.Visible = true;
@@ -341,7 +350,7 @@ namespace DynamicDb.Pages
                     {
                         string columnName = Array.Find(tableColumnNames, tableColumnName => control.ID.Contains(tableColumnName));
                         insertQueryColumns += columnName + ", ";
-                        queryValues += value + ", ";
+                        queryValues += "'" + value + "'" + ", ";
                     }
                 }
             }
@@ -356,15 +365,31 @@ namespace DynamicDb.Pages
             if (string.IsNullOrEmpty(strBetweenParantheses))
             {
                 PanelAddNewRow.Controls.Clear();
-                Response.Write("<script>alert('En az bir alan dolu olmalidir')</script>");
+                Response.Write("<script>alert('En az bir alan dolu olmalidir.')</script>");
             } else
             {
                 insertQueryColumns += queryValues;
-                SqlConnection sqlConnection = new SqlConnection(GetConnectionString());
-                SqlCommand sqlCommand = new SqlCommand(insertQueryColumns, sqlConnection);
-                sqlConnection.Open();
-                sqlCommand.ExecuteNonQuery();
-                sqlConnection.Close();
+                try
+                {
+                    SqlConnection sqlConnection = new SqlConnection(GetConnectionString());
+                    SqlCommand sqlCommand = new SqlCommand(insertQueryColumns, sqlConnection);
+                    sqlConnection.Open();
+                    sqlCommand.ExecuteNonQuery();
+                    sqlConnection.Close();
+
+                    DataGridView.DataBind();
+                }
+                catch (Exception exc)
+                {
+                    Console.WriteLine("*** HATA BASLANGIC***");
+                    Console.WriteLine(exc);
+                    Console.WriteLine("*** HATA BITIS***");
+                }
+
+                SubmitNewRow.Visible = false;
+                CancelAddRow.Visible = false;
+
+                PanelAddNewRow.Visible = false;
             }
         }
 
@@ -377,12 +402,77 @@ namespace DynamicDb.Pages
         {
             SubmitNewColumn.Visible = true;
             CancelAddColumn.Visible = true;
+
+            PanelAddNewColumn.Visible = true;
         }
 
         protected void SubmitNewColumn_Click(object sender, EventArgs eventArgs)
         {
             string[] tableColumnNames = GetColumnsName(_tableName);
-            string newColumn = TextBoxNewColumnName.Text;
+            string newColumnName = TextBoxNewColumnName.Text;
+            string newColumnType = "";
+            
+            if (string.IsNullOrEmpty(newColumnName))
+            {
+                PanelAddNewColumn.Controls.Clear();
+                Response.Write("<script>alert('Sütun ad alani dolu olmalidir.')</script>");
+            }
+            else
+            {
+                string selectedType = DropDownListNewColumnTypes.SelectedValue;
+                // Secilen tipe gore tipi ayarla
+                if (selectedType == "number")
+                {
+                    newColumnType = "INT";
+                }
+                else if (selectedType == "string")
+                {
+                    newColumnType = "NVARCHAR(80)";
+                }
+                else if (selectedType == "date")
+                {
+                    newColumnType = "DATE";
+                }
+                else if (selectedType == "image")
+                {
+                    newColumnType = "IMAGE";
+                }
+
+                string sqlQuery = $"ALTER TABLE [{_tableName}] ADD [{newColumnName}] [{newColumnType}] NULL";
+
+                try
+                {
+                    SqlConnection sqlConnection = new SqlConnection(GetConnectionString());
+                    SqlCommand sqlCommand = new SqlCommand(sqlQuery, sqlConnection);
+                    sqlConnection.Open();
+                    sqlCommand.ExecuteNonQuery();
+                    sqlConnection.Close();
+
+                    DataGridView.DataBind();
+
+                    try
+                    {
+                        Response.Redirect(Request.RawUrl, false);
+                    }
+                    catch (Exception exc)
+                    {
+                        Console.WriteLine("*** HATA BASLANGIC***");
+                        Console.WriteLine(exc);
+                        Console.WriteLine("*** HATA BITIS***");
+                    }
+                }
+                catch (Exception exc)
+                {
+                    Console.WriteLine("*** HATA BASLANGIC***");
+                    Console.WriteLine(exc);
+                    Console.WriteLine("*** HATA BITIS***");
+                }
+
+                SubmitNewColumn.Visible = false;
+                CancelAddColumn.Visible = false;
+
+                PanelAddNewColumn.Visible = false;
+            }
         }
 
         protected void CancelAddColumn_Click(object sender, EventArgs eventArgs)
