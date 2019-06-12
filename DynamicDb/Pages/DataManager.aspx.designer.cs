@@ -31,76 +31,112 @@ namespace DynamicDb.Pages {
         protected global::System.Web.UI.HtmlControls.HtmlForm form1;
         
         /// <summary>
-        /// ButtonAddNewRow denetimi.
+        /// ButtonAddRow denetimi.
         /// </summary>
         /// <remarks>
         /// Otomatik üretilmiş alan.
         /// Değiştirmek için, alan bildirimini tasarımcı dosyasından arka plan kod dosyasına taşıyın.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Button ButtonAddNewRow;
+        protected global::System.Web.UI.WebControls.Button ButtonAddRow;
         
         /// <summary>
-        /// ButtonAddNewColumn denetimi.
+        /// ButtonDeleteRow denetimi.
         /// </summary>
         /// <remarks>
         /// Otomatik üretilmiş alan.
         /// Değiştirmek için, alan bildirimini tasarımcı dosyasından arka plan kod dosyasına taşıyın.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Button ButtonAddNewColumn;
+        protected global::System.Web.UI.WebControls.Button ButtonDeleteRow;
         
         /// <summary>
-        /// SubmitNewRow denetimi.
+        /// ButtonAddColumn denetimi.
         /// </summary>
         /// <remarks>
         /// Otomatik üretilmiş alan.
         /// Değiştirmek için, alan bildirimini tasarımcı dosyasından arka plan kod dosyasına taşıyın.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Button SubmitNewRow;
+        protected global::System.Web.UI.WebControls.Button ButtonAddColumn;
         
         /// <summary>
-        /// CancelAddRow denetimi.
+        /// ButtonDeleteColumn denetimi.
         /// </summary>
         /// <remarks>
         /// Otomatik üretilmiş alan.
         /// Değiştirmek için, alan bildirimini tasarımcı dosyasından arka plan kod dosyasına taşıyın.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Button CancelAddRow;
+        protected global::System.Web.UI.WebControls.Button ButtonDeleteColumn;
         
         /// <summary>
-        /// SubmitNewColumn denetimi.
+        /// ButtonSubmitAddRow denetimi.
         /// </summary>
         /// <remarks>
         /// Otomatik üretilmiş alan.
         /// Değiştirmek için, alan bildirimini tasarımcı dosyasından arka plan kod dosyasına taşıyın.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Button SubmitNewColumn;
+        protected global::System.Web.UI.WebControls.Button ButtonSubmitAddRow;
         
         /// <summary>
-        /// CancelAddColumn denetimi.
+        /// ButtonCancelAddRow denetimi.
         /// </summary>
         /// <remarks>
         /// Otomatik üretilmiş alan.
         /// Değiştirmek için, alan bildirimini tasarımcı dosyasından arka plan kod dosyasına taşıyın.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Button CancelAddColumn;
+        protected global::System.Web.UI.WebControls.Button ButtonCancelAddRow;
         
         /// <summary>
-        /// PanelAddNewRow denetimi.
+        /// ButtonSubmitAddColumn denetimi.
         /// </summary>
         /// <remarks>
         /// Otomatik üretilmiş alan.
         /// Değiştirmek için, alan bildirimini tasarımcı dosyasından arka plan kod dosyasına taşıyın.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Panel PanelAddNewRow;
+        protected global::System.Web.UI.WebControls.Button ButtonSubmitAddColumn;
         
         /// <summary>
-        /// PanelAddNewColumn denetimi.
+        /// ButtonCancelAddColumn denetimi.
         /// </summary>
         /// <remarks>
         /// Otomatik üretilmiş alan.
         /// Değiştirmek için, alan bildirimini tasarımcı dosyasından arka plan kod dosyasına taşıyın.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Panel PanelAddNewColumn;
+        protected global::System.Web.UI.WebControls.Button ButtonCancelAddColumn;
+        
+        /// <summary>
+        /// ButtonSubmitDeleteColumn denetimi.
+        /// </summary>
+        /// <remarks>
+        /// Otomatik üretilmiş alan.
+        /// Değiştirmek için, alan bildirimini tasarımcı dosyasından arka plan kod dosyasına taşıyın.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Button ButtonSubmitDeleteColumn;
+        
+        /// <summary>
+        /// ButtonCancelDeleteColumn denetimi.
+        /// </summary>
+        /// <remarks>
+        /// Otomatik üretilmiş alan.
+        /// Değiştirmek için, alan bildirimini tasarımcı dosyasından arka plan kod dosyasına taşıyın.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Button ButtonCancelDeleteColumn;
+        
+        /// <summary>
+        /// PanelAddRow denetimi.
+        /// </summary>
+        /// <remarks>
+        /// Otomatik üretilmiş alan.
+        /// Değiştirmek için, alan bildirimini tasarımcı dosyasından arka plan kod dosyasına taşıyın.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Panel PanelAddRow;
+        
+        /// <summary>
+        /// PanelAddColumn denetimi.
+        /// </summary>
+        /// <remarks>
+        /// Otomatik üretilmiş alan.
+        /// Değiştirmek için, alan bildirimini tasarımcı dosyasından arka plan kod dosyasına taşıyın.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Panel PanelAddColumn;
         
         /// <summary>
         /// TextBoxNewColumnName denetimi.
@@ -119,6 +155,24 @@ namespace DynamicDb.Pages {
         /// Değiştirmek için, alan bildirimini tasarımcı dosyasından arka plan kod dosyasına taşıyın.
         /// </remarks>
         protected global::System.Web.UI.WebControls.DropDownList DropDownListNewColumnTypes;
+        
+        /// <summary>
+        /// PanelDeleteColumn denetimi.
+        /// </summary>
+        /// <remarks>
+        /// Otomatik üretilmiş alan.
+        /// Değiştirmek için, alan bildirimini tasarımcı dosyasından arka plan kod dosyasına taşıyın.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Panel PanelDeleteColumn;
+        
+        /// <summary>
+        /// TextBoxDeleteColumn denetimi.
+        /// </summary>
+        /// <remarks>
+        /// Otomatik üretilmiş alan.
+        /// Değiştirmek için, alan bildirimini tasarımcı dosyasından arka plan kod dosyasına taşıyın.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.TextBox TextBoxDeleteColumn;
         
         /// <summary>
         /// DataSource denetimi.

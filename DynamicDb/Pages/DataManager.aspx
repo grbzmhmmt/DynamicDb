@@ -15,15 +15,23 @@
 
     <form id="form1" runat="server">
         <div class="active">
-            <asp:Button ID="ButtonAddNewRow" runat="server" Text="Add New Row" OnClick="ButtonAddNewRow_Click" />
-            <asp:Button ID="ButtonAddNewColumn" runat="server" Text="Add New Column" OnClick="ButtonAddNewColumn_Click" />
-            <asp:Button ID="SubmitNewRow" runat="server" Text="Add" OnClick="SubmitNewRow_Click" Visible="false"/>
-            <asp:Button ID="CancelAddRow" runat="server" Text="Cancel" OnClick="CancelAddRow_Click" Visible="false" />
-            <asp:Button ID="SubmitNewColumn" runat="server" Text="Add" OnClick="SubmitNewColumn_Click" Visible="false"/>
-            <asp:Button ID="CancelAddColumn" runat="server" Text="Cancel" OnClick="CancelAddColumn_Click" Visible="false" />
-            <div>                
-                <asp:Panel ID="PanelAddNewRow" runat="server" Visible="false"></asp:Panel>
-                <asp:Panel ID="PanelAddNewColumn" runat="server" Visible="false">
+            <asp:Button ID="ButtonAddRow" runat="server" Text="Start Row Adding" OnClick="ButtonStartAddRow_Click" />
+            <asp:Button ID="ButtonDeleteRow" runat="server" Text="Delete Selected Row" OnClick="ButtonDeleteSelectedRow_Click" />
+
+            <asp:Button ID="ButtonAddColumn" runat="server" Text="Start Column Adding" OnClick="ButtonStartAddColumn_Click" />
+            <asp:Button ID="ButtonDeleteColumn" runat="server" Text="Start Column Deleting" OnClick="ButtonStartDeleteColumn_Click" />
+
+            <asp:Button ID="ButtonSubmitAddRow" runat="server" Text="Add" OnClick="ButtonSubmitAddRow_Click" Visible="false" />
+            <asp:Button ID="ButtonCancelAddRow" runat="server" Text="Cancel" OnClick="ButtonCancelAddRow_Click" Visible="false" />
+
+            <asp:Button ID="ButtonSubmitAddColumn" runat="server" Text="Add" OnClick="ButtonSubmitAddColumn_Click" Visible="false" />
+            <asp:Button ID="ButtonCancelAddColumn" runat="server" Text="Cancel" OnClick="ButtonCancelAddColumn_Click" Visible="false" />
+            
+            <asp:Button ID="ButtonSubmitDeleteColumn" runat="server" Text="Delete" OnClick="ButtonSubmitDeleteColumn_Click" Visible="false" />
+            <asp:Button ID="ButtonCancelDeleteColumn" runat="server" Text="Cancel" OnClick="ButtonCancelDeleteColumn_Click" Visible="false" />
+            <div>
+                <asp:Panel ID="PanelAddRow" runat="server" Visible="false"></asp:Panel>
+                <asp:Panel ID="PanelAddColumn" runat="server" Visible="false">
                     <asp:TextBox ID="TextBoxNewColumnName" runat="server"></asp:TextBox>
                     <asp:DropDownList ID="DropDownListNewColumnTypes" runat="server">
                         <asp:ListItem>number</asp:ListItem>
@@ -31,7 +39,11 @@
                         <asp:ListItem>date</asp:ListItem>
                         <asp:ListItem>image</asp:ListItem>
                     </asp:DropDownList>
-                </asp:Panel>          
+                </asp:Panel>
+                <asp:Panel ID="PanelDeleteColumn" runat="server" Visible="false">
+                    <div>Silmek istediginiz sütunun adini yaziniz.</div>
+                    <asp:TextBox ID="TextBoxDeleteColumn" runat="server"></asp:TextBox>
+                </asp:Panel>
             </div>
         </div>
         <asp:SqlDataSource ID="DataSource" runat="server"
@@ -60,6 +72,7 @@
         </asp:SqlDataSource>
         <asp:GridView ID="DataGridView" runat="server" AllowPaging="True" AllowSorting="True" AutoGenerateColumns="False" DataKeyNames="Id" DataSourceID="DataSource" ShowHeaderWhenEmpty="True">
             <Columns>
+                <asp:CommandField ShowSelectButton="True" ShowEditButton="False" />
                 <asp:BoundField DataField="Id" HeaderText="Id" InsertVisible="False" ReadOnly="True" SortExpression="Id" />
                 <asp:BoundField DataField="GenericNotNull" HeaderText="GenericNotNull" SortExpression="GenericNotNull" />
                 <asp:BoundField DataField="GenericNull" HeaderText="GenericNull" SortExpression="GenericNull" />
