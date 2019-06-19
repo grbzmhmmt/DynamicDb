@@ -13,18 +13,12 @@ namespace DynamicDb.Pages
         private string _dataSourceName;
         private string _dataBaseName;
         private string _tableName;
+        private string _userName;
+        private string _userPassword;
 
         protected void Page_Load(object sender, EventArgs e)
         {
             #region _dataSource degiskenini al
-            if (string.IsNullOrEmpty(_dataSourceName) &&
-                Context != null &&
-                Context.Items["DataSourceName"] != null &&
-                !string.IsNullOrEmpty(Context.Items["DataSourceName"]?.ToString()))
-            {
-                _dataSourceName = Context.Items["DataSourceName"]?.ToString();
-            }
-
             if (string.IsNullOrEmpty(_dataSourceName) &&
                 HttpContext.Current.Session != null &&
                 HttpContext.Current.Session["DataSourceName"] != null &&
@@ -61,17 +55,71 @@ namespace DynamicDb.Pages
             #endregion
 
             #region create managerde tiklanan tablo adini al
-            if (Request != null && Request.QueryString != null && !string.IsNullOrEmpty(Request.QueryString["tableName"]))
+            //if (Request != null && Request.QueryString != null && !string.IsNullOrEmpty(Request.QueryString["tableName"]))
+            if (HttpContext.Current.Session != null &&
+                HttpContext.Current.Session["tableName"] != null)
             {
-                if (!string.IsNullOrEmpty(TextBoxChangeTableName.Text) && _tableName != Request.QueryString["tableName"])
+                string newTableChangedName = HttpContext.Current.Session["tableName"]?.ToString();
+                if (!string.IsNullOrEmpty(newTableChangedName))
                 {
-                    _tableName = TextBoxChangeTableName.Text.Trim();
+                    string isTableNameChanged = HttpContext.Current.Session["isTableNameChanged"]?.ToString();
+
+                    if (isTableNameChanged == "true")
+                    {
+                        _tableName = newTableChangedName;
+                        isTableNameChanged = "false";
+                        lblTableName.Text = _tableName;
+                        HttpContext.Current.Session["isTableNameChanged"] = "false";
+                        HttpContext.Current.Session["tableName"] = newTableChangedName;
+                        //string redirectUrl = Request.RawUrl;
+                        //redirectUrl=redirectUrl.Replace("isNameChanged=true", "isNameChanged=false");
+                        //Response.Redirect(redirectUrl, true);
+                    }
+                    else
+                    {
+                        _tableName = newTableChangedName;
+                        lblTableName.Text = _tableName;
+                    }
                 }
                 else
                 {
-                    _tableName = Request.QueryString["tableName"];
+                    _tableName = newTableChangedName;
+                    lblTableName.Text = _tableName;
                 }
             }
+            #endregion
+
+            #region User Kontrol
+            if (HttpContext.Current.Session != null &&
+                HttpContext.Current.Session["UserName"] != null &&
+                HttpContext.Current.Session["Password"] != null &&
+                !string.IsNullOrEmpty(HttpContext.Current.Session["UserName"]?.ToString()) &&
+                !string.IsNullOrEmpty(HttpContext.Current.Session["Password"]?.ToString()))
+            {
+                _userName = HttpContext.Current.Session["UserName"] as string;
+                _userPassword = HttpContext.Current.Session["Password"] as string;
+            }
+
+            string sqlConnection = "Data Source=" + _dataSourceName + " ;Database=SqlDynamicDbMyUsers;Trusted_Connection=True;";
+            //Temel Database e bağlantı kuruluyor
+            SqlConnection conn = new SqlConnection(sqlConnection);
+
+            //ilgili Kullanıcı varmı diye sorgu atılıyor
+            string query = "SELECT * FROM Users WHERE UserName='" + _userName + "' AND Password='" + _userPassword + "'";
+
+            SqlCommand cmd = new SqlCommand(query, conn);
+
+            conn.Open();
+
+            SqlDataReader dr = cmd.ExecuteReader();
+
+            if (!dr.Read())//kullanıcı kontrolü
+            {
+                Response.Redirect("NotFound.aspx", true);
+            }
+
+            dr.Close();
+            conn.Close();
             #endregion
 
             SetVisibilitiesToFalse();
@@ -126,54 +174,6 @@ namespace DynamicDb.Pages
                     PanelAddRow.Controls.Add(new LiteralControl("<br />"));
                 }
             }
-            /*
-            if (DataGridView.SelectedIndex == -1)
-            {
-                string[] tableColumnNames = GetColumnsName(_tableName);
-
-                for (int i = 1; i < tableColumnNames.Length; i++)
-                {
-                    string columnName = tableColumnNames[i];
-
-                    TextBox addNewRowTextBox = new TextBox
-                    {
-                        ID = "AddRow" + columnName,
-                        Text = columnName
-                    };
-
-                    addNewRowTextBox.Attributes.Add("placeholder", columnName);
-                    PanelAddRow.Controls.Add(addNewRowTextBox);
-
-                    if (i % 8 == 0)
-                    {
-                        PanelAddRow.Controls.Add(new LiteralControl("<br />"));
-                    }
-                }
-            }
-            else
-            {
-                GridViewRow gridViewRow = DataGridView.Rows[DataGridView.SelectedIndex];
-
-                for (int i = 0; i < gridViewRow.Cells.Count; i++)
-                {
-                    var cell = gridViewRow.Cells[i];
-                    string cellValue = cell.ToString().Trim();
-
-                    TextBox addNewRowTextBox = new TextBox
-                    {
-                        ID = "AddRow" + cellValue,
-                        Text = cellValue
-                    };
-
-                    PanelAddRow.Controls.Add(addNewRowTextBox);
-
-                    if (i % 8 == 0)
-                    {
-                        PanelAddRow.Controls.Add(new LiteralControl("<br />"));
-                    }
-                }
-            }
-            */
         }
 
         private void BindGrid()
@@ -187,41 +187,10 @@ namespace DynamicDb.Pages
         {
             DataSource.SelectParameters.Clear();
             DataSource.DeleteParameters.Clear();
-            //DataSource.UpdateParameters.Clear();
 
             string[] tableColumnNames = GetColumnsName(_tableName);
 
             string selectCommand = "SELECT * FROM [" + _tableName + "] ";
-
-            #region UPDATE QUERY
-            //string updateQuery = "UPDATE [" + _tableName + "] SET ";
-
-            //for (int i = 0; i < tableColumnNames.Length; i++)
-            //{
-            //    string item = tableColumnNames[i];
-            //    if (i == 0)
-            //    {
-            //        updateQuery += "[" + item + "] = @" + item;
-            //    }
-            //    else
-            //    {
-            //        updateQuery += ", [" + item + "] = @" + item;
-            //    }
-            //}
-
-            //for (int i = 0; i < tableColumnNames.Length; i++)
-            //{
-            //    string item = tableColumnNames[i];
-            //    if (i == 0)
-            //    {
-            //        updateQuery += " WHERE[" + item + "] = @original_" + item;
-            //    }
-            //    else
-            //    {
-            //        updateQuery += " AND (([" + item + "] = @original_" + item + ") OR ([" + item + "] IS NULL AND @original_" + item + " IS NULL)) ";
-            //    }
-            //}
-            #endregion
 
             #region DELETE QUERY
             string deleteQuery = "DELETE FROM [" + _tableName + "] ";
@@ -240,30 +209,9 @@ namespace DynamicDb.Pages
             }
             #endregion
 
+            DataSource.ConnectionString = "Data Source=(Local);Initial Catalog=" + _dataBaseName + ";Integrated Security=True";
             DataSource.SelectCommand = selectCommand;
             DataSource.DeleteCommand = deleteQuery;
-            //DataSource.UpdateCommand = updateQuery;
-
-            #region UPDATE PARAMETERS
-            //for (int i = 1; i < tableColumnNames.Length; i++)
-            //{
-            //    string columnName = tableColumnNames[i];
-            //    DataSource.UpdateParameters.Add(new Parameter(columnName, DbType.String));
-            //}
-
-            //for (int i = 0; i < tableColumnNames.Length; i++)
-            //{
-            //    string columnName = tableColumnNames[i];
-            //    if (i == 0)
-            //    {
-            //        DataSource.UpdateParameters.Add(new Parameter("original_" + columnName, DbType.Int32));
-            //    }
-            //    else
-            //    {
-            //        DataSource.UpdateParameters.Add(new Parameter("original_" + columnName, DbType.String));
-            //    }
-            //}
-            #endregion
 
             #region DELETE PARAMETERS
             for (int i = 0; i < tableColumnNames.Length; i++)
@@ -283,21 +231,19 @@ namespace DynamicDb.Pages
 
         private void CreateSqlDataGridView()
         {
-            string[] tableColumnNames = GetColumnsName(_tableName);
-            string[] primaryKeys = new string[1];
+            DataGridView.Columns.Clear();
 
+            string[] tableColumnNames = GetColumnsName(_tableName);
+
+            string[] primaryKeys = new string[1];
             primaryKeys[0] = tableColumnNames[0];
 
             DataGridView.DataKeyNames = primaryKeys;
-
-            DataGridView.Columns.Clear();
 
             CommandField commandButtons = new CommandField()
             {
                 ShowSelectButton = true,
                 ShowDeleteButton = true
-                //ShowEditButton = true,
-                //ShowCancelButton = true
             };
 
             DataGridView.Columns.Add(commandButtons);
@@ -425,25 +371,6 @@ namespace DynamicDb.Pages
             }
             else
             {
-                //string selectedType = DropDownListNewColumnTypes.SelectedValue;
-                // Secilen tipe gore tipi ayarla
-                //if (selectedType == "number")
-                //{
-                //    newColumnType = "INT";
-                //}
-                //else if (selectedType == "string")
-                //{
-                //    newColumnType = "NVARCHAR(80)";
-                //}
-                //else if (selectedType == "date")
-                //{
-                //    newColumnType = "DATE";
-                //}
-                //else if (selectedType == "image")
-                //{
-                //    newColumnType = "IMAGE";
-                //}
-
                 string sqlQuery = $"ALTER TABLE [{_tableName}] ADD [{newColumnName}] {newColumnType} NULL";
 
                 try
@@ -453,7 +380,7 @@ namespace DynamicDb.Pages
                     sqlConnection.Open();
                     sqlCommand.ExecuteNonQuery();
                     sqlConnection.Close();
-                    
+
                     TextBoxNewColumnName.Text = "";
                     TextBoxDeleteColumn.Text = "";
 
@@ -550,53 +477,7 @@ namespace DynamicDb.Pages
         #region Yardimci fonksiyonlar
         private string GetConnectionString()
         {
-            string connectionString = "";
-            if (_dataSourceName == null)
-            {
-                _dataSourceName = Context.Items["DataSourceName"]?.ToString();
-
-                if (!string.IsNullOrEmpty(_dataSourceName))
-                {
-                    if (_dataSourceName.Contains("(LocalDB)\\MSSQLLocalDB"))
-                    {
-                        string dataFileSourceName = "C:\\Github\\DynamicDb\\DynamicDb\\App_Data\\DynamicDatabase.mdf";
-                        connectionString = "Data Source=(LocalDB)\\MSSQLLocalDB;" +
-                            "AttachDbFilename=" + dataFileSourceName + ";" +
-                            "Initial Catalog=Alpha;" +
-                            "Integrated Security=True;" +
-                            "Connect Timeout=30;" +
-                            "Application Name=DynamicDb";
-                    }
-                    else
-                    {
-                        connectionString = "Data Source=" + _dataSourceName + ";Database='" + _dataBaseName + "';Trusted_Connection=True;";
-                    }
-                    return connectionString;
-                }
-                return "";
-            }
-            else if (!string.IsNullOrEmpty(_dataSourceName))
-            {
-                if (_dataSourceName.Contains("(LocalDB)\\MSSQLLocalDB"))
-                {
-                    string dataFileSourceName = "C:\\Github\\DynamicDb\\DynamicDb\\App_Data\\DynamicDatabase.mdf";
-                    connectionString = "Data Source=(LocalDB)\\MSSQLLocalDB;" +
-                        "AttachDbFilename=" + dataFileSourceName + ";" +
-                        "Initial Catalog=Alpha;" +
-                        "Integrated Security=True;" +
-                        "Connect Timeout=30;" +
-                        "Application Name=DynamicDb";
-                }
-                else
-                {
-                    connectionString = "Data Source=" + _dataSourceName + ";Database='" + _dataBaseName + "';Trusted_Connection=True;";
-                }
-                return connectionString;
-            }
-            else
-            {
-                return "";
-            }
+            return "Data Source=" + _dataSourceName + ";Database='" + _dataBaseName + "';Trusted_Connection=True;";
         }
 
         private string GetStringBetween(string value, string a, string b)
@@ -663,7 +544,7 @@ namespace DynamicDb.Pages
                 cellValues[i - 2] = gridViewRow.Cells[i].Text.Trim();
             }
 
-            for (int i = 0; i < PanelAddRow.Controls.Count; i++) 
+            for (int i = 0; i < PanelAddRow.Controls.Count; i++)
             {
                 Control control = PanelAddRow.Controls[i];
 
@@ -755,7 +636,7 @@ namespace DynamicDb.Pages
         {
             string oldName = TextBoxOldColumnName.Text.Trim();
             string newName = TextBoxNewColumnName.Text.Trim();
-            
+
             if (string.IsNullOrEmpty(oldName) || string.IsNullOrEmpty(newName))
             {
                 Response.Write("<script>alert('Alanlar dolu olmalidir.')</script>");
@@ -790,7 +671,7 @@ namespace DynamicDb.Pages
                     Console.WriteLine("*** HATA BITIS***");
                 }
             }
-            
+
             TextBoxOldColumnName.Text = "";
             TextBoxNewColumnName.Text = "";
             TextBoxDeleteColumn.Text = "";
@@ -829,14 +710,19 @@ namespace DynamicDb.Pages
                     sqlCommand.ExecuteNonQuery();
                     sqlConnection.Close();
 
+                    HttpContext.Current.Session["isTableNameChanged"] = "true";
+                    HttpContext.Current.Session["tableName"] = newTableName;
+
                     try
                     {
                         _tableName = newTableName;
-                        Request.RawUrl.Replace(_tableName, newTableName);
-                        Response.Redirect(Request.RawUrl, true);
+                        lblTableName.Text = _tableName;
+                        //Request.RawUrl.Replace(_tableName, newTableName);
+                        //Response.Redirect(Request.RawUrl + "&isNameChanged=true&newTableName=" + newTableName, true);
                     }
                     catch (Exception exc)
                     {
+                        //Response.Redirect(Request.RawUrl + "&isNameChanged=true&newTableName=" + newTableName, true);
                         Console.WriteLine("*** HATA BASLANGIC***");
                         Console.WriteLine(exc);
                         Console.WriteLine("*** HATA BITIS***");
@@ -844,6 +730,7 @@ namespace DynamicDb.Pages
                 }
                 catch (Exception exc)
                 {
+                    //Response.Redirect(Request.RawUrl + "&isNameChanged=true&newTableName=" + newTableName, true);
                     Console.WriteLine("*** HATA BASLANGIC***");
                     Console.WriteLine(exc);
                     Console.WriteLine("*** HATA BITIS***");

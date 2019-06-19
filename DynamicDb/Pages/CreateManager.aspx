@@ -53,12 +53,9 @@
                 for (i = 0; i < counter; i++) {
 
                     tblColumnValues += $('#txtTblColumn' + i).val() + ",";
-                    debugger;
                 }
 
                 $('#hdnTblColumns').val(tblColumnValues);
-                debugger;
-                alert(tblColumnValues);
 
             });
         });
@@ -101,6 +98,10 @@
             color: #fff;
             text-align: left;
         }
+
+        .float_right {
+            float: right;
+        }
     </style>
 </head>
 <body>
@@ -114,8 +115,6 @@
                 <h3 class="bg-secondary">Create Database<br />
                 </h3>
                 <br />
-                <asp:TextBox CssClass="col-sm-9" ID="txtDbDataSourceName" placeholder="DataSource Name" runat="server"></asp:TextBox>
-                <br />
                 <asp:TextBox CssClass="col-sm-9" ID="txtDbDatabaseName" placeholder="Database Name" runat="server"></asp:TextBox>
                 <br />
                 <br />
@@ -125,7 +124,8 @@
                 <h3 class="bg-secondary text-center">Create Table</h3>
                 <div class="col-12">
                     <div class="row">
-                        <asp:TextBox CssClass="col-sm-4" ID="txtTblDatabaseName" placeholder="Database Name" runat="server"></asp:TextBox>
+                        <%--<asp:TextBox CssClass="col-sm-4" ID="txtTblDatabaseName" placeholder="Database Name" runat="server"></asp:TextBox>--%>
+                        <asp:DropDownList ID="DropDownDBNames" runat="server"></asp:DropDownList>
                         <asp:TextBox CssClass="col-sm-4" ID="txtTblTableName" placeholder="Table Name" runat="server"></asp:TextBox>
                         <asp:TextBox CssClass="col-sm-4" ID="txtTblPrimaryKeyName" placeholder="Primary Key" runat="server"></asp:TextBox>
                         <asp:TextBox CssClass="col-sm-4" ID="txtTblForeignKeyName" placeholder="Foreign Key" runat="server"></asp:TextBox>
@@ -147,37 +147,27 @@
             <div class="col-md-4 bg-warning p-0">
                 <h3 class="bg-secondary text-center">Your Tables</h3>
                 <div class="row">
-                    <div class="col-12">
-                        <asp:TextBox CssClass="col-sm-8" ID="txtGetTblDatabaseName" placeholder="Database Name" runat="server"></asp:TextBox>
-                        <asp:Button class="btn btn-success btn-sm col-sm-3 m-1 " type='button' ID='BtnGetTables' OnClick="GetTables_Click" Text="Get Tables" runat="server" />
-                        <hr />
+                    <div class="col-12 m-0">
+                        <div class="row m-0">
+                            <div class="col-sm-3 m-0">
+                                <asp:DropDownList ID="DropDownGetTblDbNames" runat="server"></asp:DropDownList>
+                            </div>
+                            <div class="col-sm-9 m-0">
+                                <asp:Button class="btn btn-success btn-sm col-sm-3 m-1" type='button' ID='BtnGetTables' OnClick="GetTables_Click" Text="Get Tables" runat="server" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-12 m-0">
+                        <%--<asp:TextBox CssClass="col-sm-8" ID="txtGetTblDatabaseName" placeholder="Database Name" runat="server"></asp:TextBox>--%>
+
                         <asp:GridView ID="TablesGridView" runat="server"
                             CssClass="app-grid"
                             HeaderStyle-CssClass="grid-header"
-                            RowStyle-CssClass="grid-rows" 
+                            RowStyle-CssClass="grid-rows"
                             AutoGenerateSelectButton="true"
                             OnSelectedIndexChanged="TablesGridRow_Click">
                             <%--OnRowClick="TablesGridRow_Click">--%>
                         </asp:GridView>
-                        <%--<asp:ListView ID="tablesListView" runat="server" DataKeyNames="TableName">
-                            <ItemTemplate>
-                                <p><%#:Item.ProductName%></p>
-                            </ItemTemplate>
-                        </asp:ListView>--%>
-                        <%--  <asp:GridView ID="GridViewTables" runat="server" AutoGenerateColumns="False" DataSourceID="SqlDataSourceTables" AllowSorting="True">
-                            <Columns>
-                                <asp:BoundField DataField="Tablolar" HeaderText="Tablolar" SortExpression="Tablolar" />
-                                <asp:TemplateField ShowHeader="False">
-                                    <ItemTemplate>
-                                        <asp:LinkButton ID="LinkButton1" runat="server" CausesValidation="False" CommandName="Select" Text="Select"></asp:LinkButton>
-                                    </ItemTemplate>
-                                </asp:TemplateField>
-                            </Columns>
-                        </asp:GridView>
-
-                        <asp:SqlDataSource ID="SqlDataSourceTables" runat="server" ConnectionString="<%$ ConnectionStrings:masterConnectionString %>" SelectCommand="SELECT TABLE_NAME AS Tablolar
-FROM deneme.INFORMATION_SCHEMA.TABLES 
-WHERE TABLE_TYPE = 'BASE TABLE'"></asp:SqlDataSource>--%>
                     </div>
                 </div>
             </div>

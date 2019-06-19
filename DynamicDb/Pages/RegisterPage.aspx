@@ -17,7 +17,7 @@
 <body>
     <form id="form1" runat="server">
         <div class="offset-4 col-4">
-            <h1 class="h3 mb-3 font-weight-normal">Enter all fields</h1>
+            <h1 class="h3 mb-3 font-weight-normal">Tüm Alanları Doldurunuz.</h1>
             <br />
             <label for="inputEmail" class="sr-only">User Name</label>
             <asp:TextBox CssClass="form-control" ID="txtRegisterUserName" placeholder="UserName" runat="server" required="required" autofocus="autofocus"></asp:TextBox>

@@ -57,12 +57,6 @@
                                 <div>Yeni sütunun adini yaziniz.</div>
                                 <asp:TextBox ID="TextBoxOldColumnName" runat="server" Visible="false"></asp:TextBox>
                                 <asp:TextBox ID="TextBoxNewColumnName" runat="server"></asp:TextBox>
-                                <%--<asp:DropDownList ID="DropDownListNewColumnTypes" runat="server">
-                        <asp:ListItem>number</asp:ListItem>
-                        <asp:ListItem>string</asp:ListItem>
-                        <asp:ListItem>date</asp:ListItem>
-                        <asp:ListItem>image</asp:ListItem>
-                    </asp:DropDownList>--%>
                             </asp:Panel>
                             <asp:Panel ID="PanelDeleteColumn" runat="server" Visible="false">
                                 <div>Silmek istediginiz sütunun adini yaziniz.</div>
@@ -70,19 +64,15 @@
                             </asp:Panel>
                         </div>
                     </div>
-                    <asp:SqlDataSource ID="DataSource" runat="server"
-                        ConflictDetection="CompareAllValues"
-                        ConnectionString="<%$ ConnectionStrings:ConnectionString %>"
+                    <asp:SqlDataSource ID="DataSource" runat="server"                        
                         OldValuesParameterFormatString="original_{0}"
-                        SelectCommand="SELECT * FROM [DefaultTable]"
-                        DeleteCommand="DELETE FROM [DefaultTable] WHERE [Id] = @original_Id AND [GenericNotNull] = @original_GenericNotNull AND (([GenericNull] = @original_GenericNull) OR ([GenericNull] IS NULL AND @original_GenericNull IS NULL))">
-                        <DeleteParameters>
-                            <asp:Parameter Name="original_Id" Type="Int32" />
-                            <asp:Parameter Name="original_GenericNotNull" Type="String" />
-                            <asp:Parameter Name="original_GenericNull" Type="String" />
-                        </DeleteParameters>
+                        SelectCommand="SELECT * FROM [DefaultastasGrbzBrky]" ConnectionString="<%$ ConnectionStrings:SqlDynamicDbMyUsersConnectionString %>">
                     </asp:SqlDataSource>
-                    <asp:GridView ID="DataGridView" runat="server" AllowPaging="True" AllowSorting="True" AutoGenerateColumns="False" DataKeyNames="Id" DataSourceID="DataSource" ShowHeaderWhenEmpty="True" CellPadding="4" ForeColor="#333333" GridLines="None"
+                    <asp:Label ID="lblTableNameText" runat="server" Text="Tablo Adı : "></asp:Label>
+
+                    <asp:Label ID="lblTableName" runat="server" Text="Label"></asp:Label>
+                    <br />
+                    <asp:GridView ID="DataGridView" runat="server" AllowPaging="True" AllowSorting="True" AutoGenerateColumns="False" DataKeyNames="pkey" DataSourceID="DataSource" ShowHeaderWhenEmpty="True" CellPadding="4" ForeColor="#333333" GridLines="None"
                         OnSelectedIndexChanged="DataGridView_SelectedIndexChanged">
                         <AlternatingRowStyle BackColor="White" />
                         <EditRowStyle BackColor="#2461BF" />
@@ -96,16 +86,16 @@
                         <SortedDescendingCellStyle BackColor="#E9EBEF" />
                         <SortedDescendingHeaderStyle BackColor="#4870BE" />
                         <Columns>
-                            <asp:CommandField ShowDeleteButton="True" ShowSelectButton="True" />
-                            <asp:BoundField DataField="Id" HeaderText="Id" InsertVisible="False" ReadOnly="True" SortExpression="Id" />
-                            <asp:BoundField DataField="GenericNotNull" HeaderText="GenericNotNull" SortExpression="GenericNotNull" />
-                            <asp:BoundField DataField="GenericNull" HeaderText="GenericNull" SortExpression="GenericNull" />
+                            <asp:BoundField DataField="pkey" HeaderText="pkey" InsertVisible="False" ReadOnly="True" SortExpression="pkey" />
+                            <asp:BoundField DataField="stn0" HeaderText="stn0" SortExpression="stn0" />
+                            <asp:BoundField DataField="stn1" HeaderText="stn1" SortExpression="stn1" />
                         </Columns>
                     </asp:GridView>
 
 
                 </div>
                 <div class="col-sm-4 alert alert-dark">
+
                     <asp:TextBox ID="TextBoxChangeTableName" runat="server" placeholder="Yeni tablo ismi giriniz."></asp:TextBox>
                     <br />
                     <asp:Button CssClass="btnClass" ID="ButtonChangeTableName" runat="server" Text="Tablo Adını Değiştir" OnClick="ButtonChangeTableName_Click" />

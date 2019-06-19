@@ -1,23 +1,28 @@
 ﻿using System;
 using System.Data.SqlClient;
+using System.Web;
 using System.Web.UI;
 
 namespace DynamicDb.Pages
 {
     public partial class LoginPage : Page
     {
-        private string dataFileSourceName = "C:\\Github\\DynamicDb\\DynamicDb\\App_Data\\DynamicDatabase.mdf";
+        //private string dataFileSourceName = "C:\\Github\\DynamicDb\\DynamicDb\\App_Data\\DynamicDatabase.mdf";
+        private static string dataSourceName = "DESKTOP-6UQLI0L";
 
         private string sqlConnection;
 
         protected void Page_Load(object sender, EventArgs e)
         {
+            /*
             sqlConnection = "Data Source=(LocalDB)\\MSSQLLocalDB;" +
             "AttachDbFilename=" + dataFileSourceName + ";" +
             "Initial Catalog=Alpha;" +
             "Integrated Security=True;" +
             "Connect Timeout=30;" +
             "Application Name=DynamicDb";
+            */
+            sqlConnection = "Data Source=" + dataSourceName + " ;Database=SqlDynamicDbMyUsers;Trusted_Connection=True;";
         }
         
         protected void LoginSystem(object sender, EventArgs e)
@@ -65,10 +70,13 @@ namespace DynamicDb.Pages
 
                     try
                     {
+                        HttpContext.Current.Session["UserName"] = userName;
+                        HttpContext.Current.Session["Password"] = userPassword;
+                        HttpContext.Current.Session["DatabaseName"] = userDatabaseName;
                         Response.Redirect(directAddress);
                     } catch
                     {
-                        Response.Redirect("Pages/" + directAddress);
+                        Response.Redirect(directAddress);
                     }            
                 }
                 else
@@ -88,14 +96,14 @@ namespace DynamicDb.Pages
         {
             try
             {
-                Response.Redirect("RegisterPage.aspx");
+                Response.Redirect("RegisterPage.aspx",true);
             }
             catch (Exception exc0)
             {
                 Console.WriteLine(exc0);
                 try
                 {
-                    Response.Redirect("Pages/RegisterPage.aspx");
+                    Response.Redirect("RegisterPage.aspx");
                 }
                 catch (Exception exc1)
                 {

@@ -10,18 +10,20 @@ namespace DynamicDb.Pages
 {
     public partial class RegisterPage : System.Web.UI.Page
     {
-        private string _dataFileSourceName = "C:\\Github\\DynamicDb\\DynamicDb\\App_Data\\DynamicDatabase.mdf";
+        //private string _dataFileSourceName = "C:\\Github\\DynamicDb\\DynamicDb\\App_Data\\DynamicDatabase.mdf";
+        private static string dataSourceName = "DESKTOP-6UQLI0L";
 
         private string _sqlConnection;
 
         protected void Page_Load(object sender, EventArgs e)
         {
-            _sqlConnection = "Data Source=(LocalDB)\\MSSQLLocalDB;" +
-            "AttachDbFilename=" + _dataFileSourceName + ";" +
-            "Initial Catalog=Alpha;" +
-            "Integrated Security=True;" +
-            "Connect Timeout=30;" +
-            "Application Name=DynamicDb";
+            //_sqlConnection = "Data Source=(LocalDB)\\MSSQLLocalDB;" +
+            //"AttachDbFilename=" + _dataFileSourceName + ";" +
+            //"Initial Catalog=Alpha;" +
+            //"Integrated Security=True;" +
+            //"Connect Timeout=30;" +
+            //"Application Name=DynamicDb";
+            _sqlConnection = "Data Source=" + dataSourceName + " ;Database=SqlDynamicDbMyUsers;Trusted_Connection=True;";
         }
 
         protected void RegisterSystem(object sender, EventArgs e)
@@ -57,17 +59,21 @@ namespace DynamicDb.Pages
                     sqlCommand.ExecuteNonQuery();
                     //Sql Baglantisini kapat
                     sqlConnection.Close();
-
+                    string directAddress = "Dashboard.aspx?" +  "&userName=" + userName + "&password=" + userPassword;
+                    
                     try
                     {
-                        Response.Redirect("Dashboard.aspx");
+                        HttpContext.Current.Session["UserName"] = userName;
+                        HttpContext.Current.Session["Password"] = userPassword;
+                        Response.Redirect(directAddress);
                     }
                     catch (Exception exc0)
                     {
                         Console.WriteLine(exc0);
                         try
                         {
-                            Response.Redirect("Dashboard.aspx");
+                            Response.Redirect(directAddress);
+
                         }
                         catch (Exception exc1)
                         {
